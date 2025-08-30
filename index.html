@@ -1,608 +1,444 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBASCAPE: An Escape Room Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
-  <title>Portfolio - Harsh Jayraj</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
 
-  <!-- Favicons -->
-  <link href="assets\img\icons8-resume-32.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+        .gradient-bg {
+            background: linear-gradient(135deg, #1f2937, #111827);
+        }
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        .pulse-timer {
+            animation: pulse-red 1.5s infinite;
+        }
 
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: iPortfolio - v3.10.0
-  * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+        @keyframes pulse-red {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+    </style>
 </head>
+<body class="gradient-bg text-gray-100 flex items-center justify-center min-h-screen p-4">
 
-<body>
-
-  <!-- ======= Mobile nav toggle button ======= -->
-  <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
-
-  <!-- ======= Header ======= -->
-  <header id="header">
-    <div class="d-flex flex-column">
-
-      <div class="profile">
-        <img src="assets/img/profile-img.jpg" alt="" class="img-fluid rounded-circle">
-        <h1 class="text-light"><a href="index.html">Harsh Jayraj</a></h1>
-        <div class="social-links mt-3 text-center">
-          <a href="https://twitter.com/harsh_jayraj" class="twitter"><i class="bx bxl-twitter"></i></a>
-          <a href="https://www.facebook.com/harsh.jayraj" class="facebook"><i class="bx bxl-facebook"></i></a>
-          <a href="https://www.instagram.com/harsh._.jayraj/" class="instagram"><i class="bx bxl-instagram"></i></a>
-          <!-- <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a> -->
-          <a href="https://www.linkedin.com/in/harsh-jayraj-b25848198/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-        </div>
-      </div>
-
-      <nav id="navbar" class="nav-menu navbar">
-        <ul>
-          <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
-          <li><a href="#about" class="nav-link scrollto"><i class="bx bx-user"></i> <span>About</span></a></li>
-          <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>Resume</span></a></li>
-          <li><a href="#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Portfolio</span></a></li>
-          <li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Services</span></a></li>
-          <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a></li>
-        </ul>
-      </nav><!-- .nav-menu -->
+    <div id="game-container" class="w-full max-w-4xl bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-10 flex flex-col items-center space-y-8">
+        <!-- Main game content will be rendered here by JavaScript -->
     </div>
-  </header><!-- End Header -->
-
-  <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
-    <div class="hero-container" data-aos="fade-in">
-      <h1>HARSH JAYRAJ</h1>
-      <p>I'm aspiring <span class="typed" data-typed-items="Data Scientist, Machine Learning Engineer, Computer vision Engineer"></span></p>
-    </div>
-  </section><!-- End Hero -->
-
-  <main id="main">
-
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>About</h2>
-          <p>I am student at NIT Raipur currently pursuing B.Tech in biomedical Engineering and open to work for jobs openings related to machine learning and data science.</p>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-4" data-aos="fade-right">
-            <img src="assets/img/profile-img.jpg" class="img-fluid" alt="">
-          </div>
-          <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-            <h3>Data Scientist &amp; Machine Learning Engineer.</h3>
-            <p class="fst-italic">
-              A biomedical engineer in developement with interests in machine learning and artificial intelligence.
-            </p>
-            <div class="row">
-              <div class="col-lg-6">
-                <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span>26 Aug 2001</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Website:</strong> <span>https://harsh-jayraj.github.io/</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>+91-7974381499</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span>Raipur, Chhattisgarh, India</span></li>
-                </ul>
-              </div>
-              <div class="col-lg-6">
-                <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span>23</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Bachelor's in Technology</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>harsh26082001@gmail.com</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Status:</strong> <span>Looking for opportunities</span></li>
-                </ul>
-              </div>
-            </div>
-            <p>
-              "Make it work, Make it worth." with this motto I adapt for exploration in different field everyday and keep on trying new and different things which help me grow with the experience of all the failures I achive during my journey.
-            </p>
-          </div>
-        </div>
-
-      </div>
-    </section><!-- End About Section -->
-
-    <!-- ======= Facts Section ======= -->
-    <!--<section id="facts" class="facts">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Facts</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-        </div>
-
-        <div class="row no-gutters">
-
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up">
-            <div class="count-box">
-              <i class="bi bi-emoji-smile"></i>
-              <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
-              <p><strong>Happy Clients</strong> consequuntur quae</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="100">
-            <div class="count-box">
-              <i class="bi bi-journal-richtext"></i>
-              <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
-              <p><strong>Projects</strong> adipisci atque cum quia aut</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="200">
-            <div class="count-box">
-              <i class="bi bi-headset"></i>
-              <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1" class="purecounter"></span>
-              <p><strong>Hours Of Support</strong> aut commodi quaerat</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="300">
-            <div class="count-box">
-              <i class="bi bi-people"></i>
-              <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1" class="purecounter"></span>
-              <p><strong>Hard Workers</strong> rerum asperiores dolor</p>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </section>-->
-    <!-- End Facts Section -->
-
-    <!-- ======= Skills Section ======= -->
-    <section id="skills" class="skills section-bg">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Skills</h2>
-          <p>This Areas contains all the skills which I use in my projects and their proficiency levels.</p>
-        </div>
-
-        <div class="row skills-content">
-
-          <div class="col-lg-6" data-aos="fade-up">
-
-            <div class="progress">
-              <span class="skill">PYTHON <i class="val">100%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-            <div class="progress">
-              <span class="skill">MACHINE Learning <i class="val">80%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-            <div class="progress">
-              <span class="skill">COMPUTER VISION <i class="val">60%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-
-            <div class="progress">
-              <span class="skill">SQL <i class="val">60%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-            <div class="progress">
-              <span class="skill">JAVA <i class="val">60%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-            <div class="progress">
-              <span class="skill">DATA SCIENCE <i class="val">70%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-    </section><!-- End Skills Section -->
-
-    <!-- ======= Resume Section ======= -->
-    <section id="resume" class="resume">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Resume</h2>
-          <p>I am student at NIT Raipur currently pursuing B.Tech in biomedical Engineering and open to work for jobs openings related to machine learning and data science.</p>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-6" data-aos="fade-up">
-            <h3 class="resume-title">Sumary</h3>
-            <div class="resume-item pb-0">
-              <h4>Harsh Jayraj</h4>
-              <p><em>Aspiring data science and machine learning enthusiast with never ending dedication towards imporvement and exploration.</em></p>
-              <ul>
-                <li>Raipur, Chhattisgarh, India</li>
-                <li>+91-7974381499</li>
-                <li>harsh26082001@gmail.com</li>
-              </ul>
-            </div>
-
-            <h3 class="resume-title">Education</h3>
-            <div class="resume-item">
-              <h4>Bachelor's of Technology &amp; Biomedical Engineering</h4>
-              <h5>2019-2023</h5>
-              <p><em>National Institute Of Technology Raipur</em></p>
-              <p>Pursuing Bachelor's in biomedical engineering alongside learning machine learning and data science concepts with current CGPA of 8.44.</p>
-            </div>
-            <div class="resume-item">
-              <h4>School &amp;XII </h4>
-              <h5>2018-2019</h5>
-              <p><em>Holy cross senior secondary school (CBSE)</em></p>
-              <p>completed class XII with 84%</p>
-            </div>
-          </div>
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-            <h3 class="resume-title">Professional Experience</h3>
-            <div class="resume-item">
-              <h4>Data Science Intern</h4>
-              <h5>Jan 2022 - April 2022</h5>
-              <p><em>Ignitus, Pennsylvenia(Remote) </em></p>
-              <ul>
-                <li>Data Science intern with task to perform knn for custor segmentation on dataset.</li>
-                <li>Cleaning and Exploring dataset provided by the company. </li>
-                <li>Application of different business models and insight analysis.</li>
-              </ul>
-            </div>
-            <div class="resume-item">
-              <h4>Artificial Intelligence Intern</h4>
-              <h5>June 2022 - July 2022</h5>
-              <p><em>Jivandeep Healthcare Services</em></p>
-              <ul>
-                <li>Developement of software for specific medical purpose.</li>
-                <li>Research and developement of computer vision and natural language processing project</li>
-                <li>Reviewing progess and presentation of the results of research.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section><!-- End Resume Section -->
-
-    <!-- ======= Portfolio Section ======= -->
-    <section id="portfolio" class="portfolio section-bg">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Portfolio</h2>
-          <p>This section contains all the projects completed by me till date.</p>
-        </div>
-
-        <div class="row" data-aos="fade-up">
-          <div class="col-lg-12 d-flex justify-content-center">
-            <ul id="portfolio-flters">
-              <li data-filter="*" class="filter-active">All</li>
-              <li data-filter=".filter-app">Data SCience</li>
-              <li data-filter=".filter-card">Machine Learning</li>
-              <li data-filter=".filter-web">Computer Vision</li>
-              <!-- <li data-filter=".filter-bme">Biomedical</li> -->
-            </ul>
-          </div>
-        </div>
-
-        <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="100">
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
-                <a href="https://github.com/Harsh-Jayraj/Data-Science-Project" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
-                <a href="https://github.com/Harsh-Jayraj/Computer-Vision-Basic-Projects/tree/main/Volume%20Control" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-3.png" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-3.png" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 2"><i class="bx bx-plus"></i></a>
-                <a href="https://github.com/Harsh-Jayraj/ML-Projects/tree/main/Disney%2B%20Movie%20Recommendation" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-4.png" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-4.png" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 2"><i class="bx bx-plus"></i></a>
-                <a href="https://github.com/Harsh-Jayraj/ML-Projects/tree/main/Liver%20Cirrohis%20Prediction" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-5.png" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-5.png" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 2"><i class="bx bx-plus"></i></a>
-                <a href="https://github.com/Harsh-Jayraj/Corona-Mask-Detection-OpenCV" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-6.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 3"><i class="bx bx-plus"></i></a>
-                <a href="https://github.com/Harsh-Jayraj/ML-Projects/tree/main/DataCo%20EDA" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-7.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-7.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 1"><i class="bx bx-plus"></i></a>
-                <a href="https://github.com/Harsh-Jayraj/ML-Beginner-Projects" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-8.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-8.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 3"><i class="bx bx-plus"></i></a>
-                <a href="https://github.com/Harsh-Jayraj/ML-Projects/tree/main/Stroke%20Prediction" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-9.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
-                <a href="https://github.com/Harsh-Jayraj/Brain_Tumor_Classification-BME-Major-Project" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-          <!-- ------------------------------------------------ -->
-          <!-- <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="bme 3"><i class="bx bx-plus"></i></a>
-                <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="bme 2"><i class="bx bx-plus"></i></a>
-                <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="bme 1"><i class="bx bx-plus"></i></a>
-                <a href="portfolio-details.html" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div> -->
-          <!-- --------------------------------------------------------------------- -->
-        </div>
-
-      </div>
-    </section><!-- End Portfolio Section -->
-
-    <!-- ======= Services Section ======= -->
-    <!-- <section id="services" class="services">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Services</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up">
-            <div class="icon"><i class="bi bi-briefcase"></i></div>
-            <h4 class="title"><a href="">Lorem Ipsum</a></h4>
-            <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
-            <div class="icon"><i class="bi bi-card-checklist"></i></div>
-            <h4 class="title"><a href="">Dolor Sitema</a></h4>
-            <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="200">
-            <div class="icon"><i class="bi bi-bar-chart"></i></div>
-            <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
-            <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="300">
-            <div class="icon"><i class="bi bi-binoculars"></i></div>
-            <h4 class="title"><a href="">Magni Dolores</a></h4>
-            <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="400">
-            <div class="icon"><i class="bi bi-brightness-high"></i></div>
-            <h4 class="title"><a href="">Nemo Enim</a></h4>
-            <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="500">
-            <div class="icon"><i class="bi bi-calendar4-week"></i></div>
-            <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
-            <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
-          </div>
-        </div>
-
-      </div>
-    </section>End Services Section -->
-
-
-    <!-- ======= Contact Section ======= -->
-    <section id="contact" class="contact">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Contact</h2>
-          <p>Here are my contact details listed below</p>
-        </div>
-
-        <div class="row" data-aos="fade-in">
-
-          <div class="col-lg-5 d-flex align-items-stretch">
-            <div class="info">
-              <div class="address">
-                <i class="bi bi-geo-alt"></i>
-                <h4>Location:</h4>
-                <p>Raipur, Chhattisgarh, India</p>
-              </div>
-
-              <div class="email">
-                <i class="bi bi-envelope"></i>
-                <h4>Email:</h4>
-                <p>harsh26082001@gmail.com</p>
-              </div>
-
-              <div class="phone">
-                <i class="bi bi-phone"></i>
-                <h4>Call:</h4>
-                <p>+91-7974381499</p>
-              </div>
-
-              <div class="mapouter"><div class="gmap_canvas"><iframe class="gmap_iframe" width="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.app.goo.gl/j9uHM6NHKrNAMkZw8"></iframe><a href="https://pdflist.com/" alt="pdf">Pdf</a></div><style>.mapouter{position:relative;text-align:right;width:100%;height:400px;}.gmap_canvas {overflow:hidden;background:none!important;width:100%;height:400px;}.gmap_iframe {height:400px!important;}</style></div>
-
-              <!-- <iframe src="https://maps.app.goo.gl/j9uHM6NHKrNAMkZw8" frameborder="0" style="border:0; width: 100%; height: 290px;" allowfullscreen></iframe> -->
-            </div>
-
-          </div>
-
-          <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-            <form action="mailto:harsh26082001@gmail.com" method="post" role="form" class="php-email-form">
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label for="name">Your Name</label>
-                  <input type="text" name="name" class="form-control" id="name" required>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="name">Your Email</label>
-                  <input type="email" class="form-control" name="email" id="email" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="name">Subject</label>
-                <input type="text" class="form-control" name="subject" id="subject" required>
-              </div>
-              <div class="form-group">
-                <label for="name">Message</label>
-                <textarea class="form-control" name="message" rows="10" required></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><input type="submit" value="Send"></div>
-            </form>
-          </div>
-
-        </div>
-
-      </div>
-    </section><!-- End Contact Section -->
-
-  </main><!-- End #main -->
-
-  <!-- ======= Footer ======= -->
-  <footer id="footer">
-    <div class="container">
-      <div class="copyright">
-          <strong><span>Thankyou for visiting!</span></strong>
-      </div>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/ -->
-        Designed by <a href="https://bootstrapmade.com/">Harsh Jayraj</a>
-      </div>
-    </div>
-  </footer><!-- End  Footer -->
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/typed.js/typed.min.js"></script>
-  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
 
+    <script>
+        // Game variables
+        const gameContainer = document.getElementById('game-container');
+        let gameState = {
+            currentView: 'start',
+            timer: 300, // 5 minutes in seconds
+            timerInterval: null,
+            clues: {
+                puzzle1: null,
+                puzzle2: null,
+                puzzle3: null,
+                puzzle4: null
+            },
+            regions: {
+                adminBlock: { name: 'Admin Block', solved: false, clue: '15' },
+                auditorium: { name: 'Auditorium', solved: false, clue: 'IMT' },
+                academicBlock: { name: 'Academic Block', solved: false, clue: '74' },
+                hostel: { name: 'Hostel Block', solved: false, clue: 'LOCK' }
+            }
+        };
+
+        // UI Rendering Functions
+        const renderHeader = () => {
+            const header = document.createElement('div');
+            header.className = 'w-full flex justify-between items-center mb-6 md:mb-8';
+            header.innerHTML = `
+                <h1 class="text-3xl md:text-4xl font-bold text-teal-400">MBASCAPE</h1>
+                <div id="timer" class="text-2xl md:text-3xl font-bold text-amber-300">05:00</div>
+            `;
+            gameContainer.appendChild(header);
+        };
+
+        const renderMessage = (title, message) => {
+            const messageEl = document.createElement('div');
+            messageEl.className = 'text-center mb-8';
+            messageEl.innerHTML = `
+                <h2 class="text-3xl font-bold mb-2 text-white">${title}</h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">${message}</p>
+            `;
+            gameContainer.appendChild(messageEl);
+        };
+
+        const createButton = (text, onClick, className = '') => {
+            const button = document.createElement('button');
+            button.innerText = text;
+            button.className = `px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg ${className}`;
+            button.onclick = onClick;
+            return button;
+        };
+
+        const updateTimerDisplay = () => {
+            const timerEl = document.getElementById('timer');
+            if (!timerEl) return;
+            const minutes = Math.floor(gameState.timer / 60);
+            const seconds = gameState.timer % 60;
+            timerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            if (gameState.timer <= 30) {
+                timerEl.classList.add('text-red-400', 'pulse-timer');
+            }
+        };
+
+        const startGameTimer = () => {
+            gameState.timerInterval = setInterval(() => {
+                if (gameState.timer > 0) {
+                    gameState.timer--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(gameState.timerInterval);
+                    endGame(false);
+                }
+            }, 1000);
+        };
+
+        // Game State and Logic
+        const renderStartScreen = () => {
+            gameContainer.innerHTML = '';
+            renderMessage('MBASCAPE: The IMT Nagpur Challenge', "Welcome, team! You've been locked in the IMT Nagpur campus. To escape, you must solve puzzles in different regions to collect clues for the \"WAY OUT LOCK\". You have 5 minutes to escape. Good luck!");
+            const startBtn = createButton('Start Game', () => {
+                startGameTimer();
+                renderView('map');
+            }, 'bg-teal-500 text-gray-900 hover:bg-teal-400');
+            gameContainer.appendChild(startBtn);
+        };
+
+        const renderMap = () => {
+            gameContainer.innerHTML = '';
+            renderHeader();
+            renderMessage('Campus Map', 'Navigate to the different blocks to find the puzzles. Solve them to collect the clues you need to escape!');
+
+            const mapGrid = document.createElement('div');
+            mapGrid.className = 'grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 w-full';
+            Object.keys(gameState.regions).forEach(key => {
+                const region = gameState.regions[key];
+                const isSolved = region.solved;
+                const regionBtn = createButton(
+                    region.name,
+                    () => isSolved ? null : renderView(key),
+                    `p-4 rounded-xl text-center font-semibold transition-all duration-300 ${isSolved ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-600 text-white'}`
+                );
+                mapGrid.appendChild(regionBtn);
+            });
+            gameContainer.appendChild(mapGrid);
+
+            const cluesContainer = document.createElement('div');
+            cluesContainer.className = 'w-full text-center mt-8';
+            cluesContainer.innerHTML = `<h3 class="text-2xl font-bold mb-4">Clue Board</h3>`;
+            const cluesDisplay = document.createElement('div');
+            cluesDisplay.className = 'flex justify-center flex-wrap gap-4 text-xl font-mono';
+            Object.values(gameState.clues).forEach(clue => {
+                const clueItem = document.createElement('div');
+                clueItem.className = 'bg-gray-700 px-4 py-2 rounded-lg';
+                clueItem.innerText = clue || '🔒';
+                cluesDisplay.appendChild(clueItem);
+            });
+            cluesContainer.appendChild(cluesDisplay);
+            gameContainer.appendChild(cluesContainer);
+            
+            const solvedCount = Object.values(gameState.regions).filter(r => r.solved).length;
+            if (solvedCount === 4) {
+                const finalDoorBtn = createButton('Go to The WAY OUT LOCK', () => renderView('finalDoor'), 'bg-amber-500 text-gray-900 hover:bg-amber-400 mt-8');
+                gameContainer.appendChild(finalDoorBtn);
+            }
+        };
+
+        const renderPuzzle1 = () => { // Admin Block: Simon Says
+            gameContainer.innerHTML = '';
+            renderHeader();
+            renderMessage('Admin Block Puzzle', 'A security panel is flashing a sequence of lights. Repeat the pattern to unlock the clue.');
+            
+            const sequence = ['red', 'blue', 'green', 'yellow'];
+            let playerSequence = [];
+            let currentStep = 0;
+            let canClick = false;
+
+            const puzzleArea = document.createElement('div');
+            puzzleArea.className = 'flex flex-col items-center space-y-6';
+
+            const lightGrid = document.createElement('div');
+            lightGrid.className = 'grid grid-cols-2 gap-4';
+            const colors = ['red', 'blue', 'green', 'yellow'];
+            const colorMap = {
+                red: 'bg-red-500',
+                blue: 'bg-blue-500',
+                green: 'bg-green-500',
+                yellow: 'bg-yellow-500'
+            };
+
+            colors.forEach(color => {
+                const light = document.createElement('div');
+                light.id = `light-${color}`;
+                light.className = `w-24 h-24 rounded-full transition-all duration-300 ${colorMap[color]} cursor-pointer opacity-50 hover:opacity-100`;
+                light.addEventListener('click', () => {
+                    if (canClick) {
+                        playerSequence.push(color);
+                        if (playerSequence[currentStep] === sequence[currentStep]) {
+                            currentStep++;
+                            if (currentStep === sequence.length) {
+                                renderPuzzleResult(true, '15');
+                            }
+                        } else {
+                            renderPuzzleResult(false);
+                        }
+                    }
+                });
+                lightGrid.appendChild(light);
+            });
+            puzzleArea.appendChild(lightGrid);
+
+            const messageEl = document.createElement('p');
+            messageEl.className = 'text-center text-lg';
+            puzzleArea.appendChild(messageEl);
+
+            const playSequence = () => {
+                canClick = false;
+                playerSequence = [];
+                currentStep = 0;
+                messageEl.textContent = 'Watch the sequence...';
+                let i = 0;
+                const interval = setInterval(() => {
+                    if (i < sequence.length) {
+                        const light = document.getElementById(`light-${sequence[i]}`);
+                        light.style.opacity = '1';
+                        setTimeout(() => light.style.opacity = '0.5', 500);
+                        i++;
+                    } else {
+                        clearInterval(interval);
+                        messageEl.textContent = 'Now you try!';
+                        canClick = true;
+                    }
+                }, 1000);
+            };
+
+            gameContainer.appendChild(puzzleArea);
+            playSequence();
+        };
+
+        const renderPuzzle2 = () => { // Auditorium: Riddle
+            gameContainer.innerHTML = '';
+            renderHeader();
+            renderMessage('Auditorium Puzzle', 'A locked box is here. The only clue is this riddle. Solve it to get your clue.');
+
+            const puzzleArea = document.createElement('div');
+            puzzleArea.className = 'flex flex-col items-center space-y-6';
+
+            const riddleText = document.createElement('p');
+            riddleText.className = 'text-xl md:text-2xl italic font-serif text-center mb-6 max-w-xl';
+            riddleText.innerHTML = `I am a place of speeches and music, but I have no voice. I hold hundreds, but cannot lift a single one. What am I?`;
+            puzzleArea.appendChild(riddleText);
+
+            const inputEl = document.createElement('input');
+            inputEl.type = 'text';
+            inputEl.placeholder = 'Your answer here...';
+            inputEl.className = 'w-full max-w-md px-4 py-2 rounded-lg bg-gray-700 text-gray-100 border-2 border-transparent focus:border-teal-500 focus:outline-none';
+            puzzleArea.appendChild(inputEl);
+
+            const submitBtn = createButton('Submit Answer', () => {
+                const answer = inputEl.value.trim().toLowerCase();
+                if (answer === 'auditorium') {
+                    renderPuzzleResult(true, 'IMT');
+                } else {
+                    renderPuzzleResult(false);
+                }
+            }, 'bg-teal-500 text-gray-900 hover:bg-teal-400');
+            puzzleArea.appendChild(submitBtn);
+
+            gameContainer.appendChild(puzzleArea);
+        };
+
+        const renderPuzzle3 = () => { // Academic Block: Math Puzzle
+            gameContainer.innerHTML = '';
+            renderHeader();
+            renderMessage('Academic Block Puzzle', 'A projector screen shows this math problem. The solution is your next clue.');
+            
+            const puzzleArea = document.createElement('div');
+            puzzleArea.className = 'flex flex-col items-center space-y-6';
+
+            const problemText = document.createElement('p');
+            problemText.className = 'text-4xl md:text-5xl font-mono text-center mb-6';
+            problemText.innerHTML = `(2 x 5) + (8 x 8) = ?`;
+            puzzleArea.appendChild(problemText);
+
+            const inputEl = document.createElement('input');
+            inputEl.type = 'number';
+            inputEl.placeholder = 'Your answer here...';
+            inputEl.className = 'w-full max-w-md px-4 py-2 rounded-lg bg-gray-700 text-gray-100 border-2 border-transparent focus:border-teal-500 focus:outline-none';
+            puzzleArea.appendChild(inputEl);
+
+            const submitBtn = createButton('Submit Answer', () => {
+                const answer = parseInt(inputEl.value, 10);
+                if (answer === 74) {
+                    renderPuzzleResult(true, '74');
+                } else {
+                    renderPuzzleResult(false);
+                }
+            }, 'bg-teal-500 text-gray-900 hover:bg-teal-400');
+            puzzleArea.appendChild(submitBtn);
+
+            gameContainer.appendChild(puzzleArea);
+        };
+
+        const renderPuzzle4 = () => { // Hostel Block: Anagram
+            gameContainer.innerHTML = '';
+            renderHeader();
+            renderMessage('Hostel Block Puzzle', 'A graffiti on the wall has these scrambled letters. Unscramble them to get your final clue.');
+            
+            const puzzleArea = document.createElement('div');
+            puzzleArea.className = 'flex flex-col items-center space-y-6';
+
+            const scrambledWord = document.createElement('div');
+            scrambledWord.className = 'text-5xl font-bold tracking-widest text-amber-300';
+            scrambledWord.innerText = 'OLKC';
+            puzzleArea.appendChild(scrambledWord);
+
+            const inputEl = document.createElement('input');
+            inputEl.type = 'text';
+            inputEl.placeholder = 'Unscramble the word...';
+            inputEl.className = 'w-full max-w-md px-4 py-2 mt-4 rounded-lg bg-gray-700 text-gray-100 border-2 border-transparent focus:border-teal-500 focus:outline-none';
+            puzzleArea.appendChild(inputEl);
+
+            const submitBtn = createButton('Submit Answer', () => {
+                const answer = inputEl.value.trim().toUpperCase();
+                if (answer === 'LOCK') {
+                    renderPuzzleResult(true, 'LOCK');
+                } else {
+                    renderPuzzleResult(false);
+                }
+            }, 'bg-teal-500 text-gray-900 hover:bg-teal-400');
+            puzzleArea.appendChild(submitBtn);
+
+            gameContainer.appendChild(puzzleArea);
+        };
+
+        const renderPuzzleResult = (success, clue = null) => {
+            if (success) {
+                // Determine which puzzle was just solved
+                const puzzleName = gameState.currentView;
+                const regionKey = Object.keys(gameState.regions).find(key => key === puzzleName);
+                if (regionKey) {
+                    gameState.regions[regionKey].solved = true;
+                    gameState.clues[puzzleName] = clue;
+                }
+                
+                gameContainer.innerHTML = '';
+                renderHeader();
+                renderMessage('Success!', `You've solved the puzzle! Your new clue is: <span class="text-amber-300 font-bold">${clue}</span>`);
+                const backBtn = createButton('Back to Map', () => renderView('map'), 'bg-gray-500 text-white hover:bg-gray-400 mt-8');
+                gameContainer.appendChild(backBtn);
+            } else {
+                const currentViewName = gameState.currentView;
+                gameContainer.innerHTML = '';
+                renderHeader();
+                renderMessage('Incorrect!', "That's not the right answer. Try again.");
+                const backBtn = createButton('Try Again', () => renderView(currentViewName), 'bg-red-500 text-white hover:bg-red-400 mt-8');
+                gameContainer.appendChild(backBtn);
+            }
+        };
+
+        const renderFinalDoor = () => {
+            gameContainer.innerHTML = '';
+            renderHeader();
+            renderMessage('The WAY OUT LOCK', 'Arrange your clues in a meaningful manner and enter the full sequence below to escape.');
+            
+            const cluesContainer = document.createElement('div');
+            cluesContainer.className = 'w-full text-center mt-4 mb-8';
+            cluesContainer.innerHTML = `<h3 class="text-2xl font-bold mb-4">Your Clues:</h3>`;
+            const cluesDisplay = document.createElement('div');
+            cluesDisplay.className = 'flex justify-center flex-wrap gap-4 text-xl font-mono';
+            Object.values(gameState.clues).forEach(clue => {
+                const clueItem = document.createElement('div');
+                clueItem.className = 'bg-gray-700 px-4 py-2 rounded-lg';
+                clueItem.innerText = clue || '🔒';
+                cluesDisplay.appendChild(clueItem);
+            });
+            cluesContainer.appendChild(cluesDisplay);
+            gameContainer.appendChild(cluesContainer);
+
+            const inputEl = document.createElement('input');
+            inputEl.type = 'text';
+            inputEl.placeholder = 'Enter the final code here...';
+            inputEl.className = 'w-full max-w-md px-4 py-2 rounded-lg bg-gray-700 text-gray-100 border-2 border-transparent focus:border-teal-500 focus:outline-none';
+            gameContainer.appendChild(inputEl);
+
+            const submitBtn = createButton('Unlock Door', () => {
+                const answer = inputEl.value.trim().toUpperCase();
+                const correctCode = 'IMT-1574-LOCK';
+                if (answer === correctCode) {
+                    endGame(true);
+                } else {
+                    renderMessage('The WAY OUT LOCK', 'That is not the correct code. Try again!');
+                }
+            }, 'bg-teal-500 text-gray-900 hover:bg-teal-400 mt-8');
+            gameContainer.appendChild(submitBtn);
+
+            const backBtn = createButton('Back to Map', () => renderView('map'), 'bg-gray-500 text-white hover:bg-gray-400 mt-4');
+            gameContainer.appendChild(backBtn);
+        };
+
+        const endGame = (didWin) => {
+            clearInterval(gameState.timerInterval);
+            gameContainer.innerHTML = '';
+            renderHeader();
+            if (didWin) {
+                renderMessage('Congratulations!', 'You have successfully arranged the clues and escaped IMT Nagpur!');
+                const playAgainBtn = createButton('Play Again', () => location.reload(), 'bg-teal-500 text-gray-900 hover:bg-teal-400 mt-8');
+                gameContainer.appendChild(playAgainBtn);
+            } else {
+                renderMessage('Time\'s Up!', 'You ran out of time. The campus is now on lockdown. Better luck next time!');
+                const playAgainBtn = createButton('Play Again', () => location.reload(), 'bg-red-500 text-white hover:bg-red-400 mt-8');
+                gameContainer.appendChild(playAgainBtn);
+            }
+        };
+
+        const renderView = (viewName) => {
+            gameState.currentView = viewName;
+            switch (viewName) {
+                case 'start':
+                    renderStartScreen();
+                    break;
+                case 'map':
+                    renderMap();
+                    break;
+                case 'adminBlock':
+                    renderPuzzle1();
+                    break;
+                case 'auditorium':
+                    renderPuzzle2();
+                    break;
+                case 'academicBlock':
+                    renderPuzzle3();
+                    break;
+                case 'hostel':
+                    renderPuzzle4();
+                    break;
+                case 'finalDoor':
+                    renderFinalDoor();
+                    break;
+                default:
+                    renderStartScreen();
+            }
+        };
+
+        // Initial game start
+        renderView('start');
+    </script>
 </body>
-
 </html>
