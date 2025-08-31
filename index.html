@@ -1,444 +1,598 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MBASCAPE: An Escape Room Game</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        .gradient-bg {
-            background: linear-gradient(135deg, #1f2937, #111827);
-        }
-
-        .pulse-timer {
-            animation: pulse-red 1.5s infinite;
-        }
-
-        @keyframes pulse-red {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MBASCAPE — ESCAPE FROM ANALYTIX</title>
+<style>
+  :root{--bg:#0f1724;--card:#0b1220;--accent:#10b981;--muted:#94a3b8;--panel:#0b1220;}
+  *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+  body{margin:0;background:linear-gradient(180deg,#071028 0%, #071a2a 60%);color:#e6eef6;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px}
+  .app{width:1100px;max-width:100%;display:grid;grid-template-columns:1fr 360px;gap:18px}
+  header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  h1{margin:0;font-size:20px}
+  .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);padding:14px;border-radius:12px}
+  .map{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .region{background:#071b24;border-radius:10px;padding:12px;cursor:pointer;border:1px solid rgba(255,255,255,0.03)}
+  .region h3{margin:0 0 6px 0;font-size:14px}
+  .region small{color:var(--muted)}
+  .status{font-weight:600;font-size:12px}
+  .controls{display:flex;gap:8px;align-items:center}
+  .btn{background:var(--accent);color:#041018;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+  .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);font-weight:600}
+  .right{display:flex;flex-direction:column;gap:12px}
+  .inv-grid{display:flex;flex-wrap:wrap;gap:8px}
+  .tile{width:48px;height:48px;border-radius:8px;background:#142a32;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;cursor:grab;border:1px solid rgba(255,255,255,0.03)}
+  .tray{display:grid;grid-template-columns:repeat(18,38px);gap:6px;padding:8px;background:rgba(255,255,255,0.02);border-radius:8px;min-height:56px;align-items:center}
+  .slot{height:38px;border-radius:6px;border:2px dashed rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-weight:800;color:#cfe7df;background:transparent}
+  .slot.filled{border-style:solid;background:#0e2830}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(1,6,12,0.6);display:flex;align-items:center;justify-content:center;z-index:60}
+  .modal{width:780px;max-width:96%;background:linear-gradient(180deg,#081621,#071018);border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.04)}
+  input[type="text"]{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;width:100%}
+  .row{display:flex;gap:8px;align-items:center}
+  .small{font-size:13px;color:var(--muted)}
+  .message{padding:8px;border-radius:8px;background:rgba(16,185,129,0.06);color:var(--accent);border:1px solid rgba(16,185,129,0.12);font-weight:700}
+  footer{grid-column:1/-1;margin-top:12px;color:var(--muted);font-size:13px;text-align:center}
+  .player-pill{padding:6px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.03);background:#08171d;color:#bfead9;font-weight:700;font-size:13px}
+  .player-section{display:flex;flex-direction:column;gap:8px}
+  .region-meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+  .hint{font-size:13px;color:var(--muted);margin-top:6px}
+  .search-btn{padding:8px 10px;border-radius:8px;border:none;background:#0b5b4a;color:#dff5ea;cursor:pointer;font-weight:700}
+  .disabled{opacity:0.45;cursor:not-allowed}
+  .timer{font-weight:900;font-family:monospace;background:#071a1a;padding:6px 10px;border-radius:8px}
+  @media (max-width:1080px){.app{grid-template-columns:1fr}}
+</style>
 </head>
-<body class="gradient-bg text-gray-100 flex items-center justify-center min-h-screen p-4">
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>MBASCAPE — ESCAPE FROM ANALYTIX</h1>
+        <div class="small">Team-based campus escape — collect clues, form the phrase, unlock the WAY OUT LOCK</div>
+      </div>
+      <div class="controls">
+        <div class="timer" id="timer">30:00</div>
+        <button class="btn" id="startBtn">Start Game</button>
+        <button class="btn secondary" id="resetBtn">Reset</button>
+      </div>
+    </header>
 
-    <div id="game-container" class="w-full max-w-4xl bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-10 flex flex-col items-center space-y-8">
-        <!-- Main game content will be rendered here by JavaScript -->
+    <!-- Left: Map & Regions -->
+    <section class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div><strong>Campus Map — Click a region to open puzzle</strong><div class="small">Solve puzzle → search region → collect clue</div></div>
+        <div class="small">Players: <span id="playerCount">0</span>/5</div>
+      </div>
+
+      <!-- Team entry -->
+      <div style="margin-bottom:12px" id="teamEntry">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input placeholder="Player 1 name" id="p1" type="text" />
+          <input placeholder="Player 2 name" id="p2" type="text" />
+          <input placeholder="Player 3 name" id="p3" type="text" />
+          <input placeholder="Player 4 name" id="p4" type="text" />
+          <input placeholder="Player 5 name" id="p5" type="text" />
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px">
+          <button class="btn" id="createTeam">Create Team</button>
+          <button class="btn secondary" id="autoFill">Autofill Names</button>
+        </div>
+      </div>
+
+      <div class="map" id="map">
+        <!-- regions populated by JS -->
+      </div>
+
+      <div style="margin-top:12px" class="hint small">
+        Tip: Communicate — assign players to regions, collect letters, drag them into the tray and arrange in order. Target phrase: <strong>ESCAPE FROM ANALYTIX</strong>
+      </div>
+    </section>
+
+    <!-- Right: Inventory & Final Lock -->
+    <aside class="panel right">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Clue Inventory</strong><div class="small">Drag tiles into the final tray</div></div>
+          <div><strong>Final Target</strong><div class="small">ESCAPE FROM ANALYTIX</div></div>
+        </div>
+        <div style="margin-top:10px" id="playerPills" class="player-section"></div>
+      </div>
+
+      <div>
+        <div class="small" style="margin-bottom:8px">Collected Clue Tiles</div>
+        <div id="inventory" class="inv-grid"></div>
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div class="small">Final Lock Tray (18 letters)</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn secondary" id="undoBtn">Undo</button>
+            <button class="btn secondary" id="shuffleBtn">Shuffle</button>
+            <button class="btn" id="unlockBtn">UNLOCK</button>
+          </div>
+        </div>
+        <div id="tray" class="tray" ondragover="event.preventDefault()"></div>
+      </div>
+
+      <div id="log" style="margin-top:8px"></div>
+    </aside>
+
+    <footer class="panel" style="text-align:center">
+      <div class="small">Built for quick campus events — open the HTML file to play. Have fun & good luck!</div>
+    </footer>
+  </div>
+
+<!-- Modal (puzzle) -->
+<div id="modalBackdrop" style="display:none" class="modal-backdrop">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div style="display:flex;justify-content:space-between;align-items:start">
+      <div>
+        <h2 id="modalTitle">Region</h2>
+        <div class="small" id="modalSub">Puzzle</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <div class="small">Player:</div>
+        <select id="collectorSelect"></select>
+        <button class="btn secondary" id="closeModal">Close</button>
+      </div>
     </div>
 
-    <script>
-        // Game variables
-        const gameContainer = document.getElementById('game-container');
-        let gameState = {
-            currentView: 'start',
-            timer: 300, // 5 minutes in seconds
-            timerInterval: null,
-            clues: {
-                puzzle1: null,
-                puzzle2: null,
-                puzzle3: null,
-                puzzle4: null
-            },
-            regions: {
-                adminBlock: { name: 'Admin Block', solved: false, clue: '15' },
-                auditorium: { name: 'Auditorium', solved: false, clue: 'IMT' },
-                academicBlock: { name: 'Academic Block', solved: false, clue: '74' },
-                hostel: { name: 'Hostel Block', solved: false, clue: 'LOCK' }
-            }
-        };
+    <div style="margin-top:12px">
+      <div id="puzzlePrompt" style="font-weight:700;margin-bottom:8px"></div>
+      <div class="small" id="puzzleHint"></div>
+      <div style="margin-top:10px" class="row">
+        <input id="puzzleAnswer" type="text" placeholder="Type your answer (press Enter or Submit)" />
+        <button class="btn" id="submitAnswer">Submit</button>
+        <button class="search-btn disabled" id="searchRegion" disabled>Search Region</button>
+      </div>
+      <div id="puzzleMsg" style="margin-top:10px"></div>
 
-        // UI Rendering Functions
-        const renderHeader = () => {
-            const header = document.createElement('div');
-            header.className = 'w-full flex justify-between items-center mb-6 md:mb-8';
-            header.innerHTML = `
-                <h1 class="text-3xl md:text-4xl font-bold text-teal-400">MBASCAPE</h1>
-                <div id="timer" class="text-2xl md:text-3xl font-bold text-amber-300">05:00</div>
-            `;
-            gameContainer.appendChild(header);
-        };
+      <div style="margin-top:12px" class="region-meta">
+        <div class="small">Status: <span id="regionStatus">Locked</span></div>
+        <div class="small">Searched: <span id="regionSearched">No</span></div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        const renderMessage = (title, message) => {
-            const messageEl = document.createElement('div');
-            messageEl.className = 'text-center mb-8';
-            messageEl.innerHTML = `
-                <h2 class="text-3xl font-bold mb-2 text-white">${title}</h2>
-                <p class="text-gray-300 max-w-2xl mx-auto">${message}</p>
-            `;
-            gameContainer.appendChild(messageEl);
-        };
+<script>
+/*
+  MBASCAPE — Single HTML implementation
+  - Team of up to 5 players
+  - Regions array defines puzzles + letter clues
+  - Target phrase: ESCAPE FROM ANALYTIX (18 letters; tray length = 18)
+*/
 
-        const createButton = (text, onClick, className = '') => {
-            const button = document.createElement('button');
-            button.innerText = text;
-            button.className = `px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg ${className}`;
-            button.onclick = onClick;
-            return button;
-        };
+const TARGET_PHRASE = "ESCAPE FROM ANALYTIX";
+const TARGET = TARGET_PHRASE.replace(/\s+/g, ""); // ESCAPEFROMANALYTIX
+const TRAY_SLOTS = TARGET.length; // 18
+const GAME_SECONDS = 30 * 60; // 30 minutes default
 
-        const updateTimerDisplay = () => {
-            const timerEl = document.getElementById('timer');
-            if (!timerEl) return;
-            const minutes = Math.floor(gameState.timer / 60);
-            const seconds = gameState.timer % 60;
-            timerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            if (gameState.timer <= 30) {
-                timerEl.classList.add('text-red-400', 'pulse-timer');
-            }
-        };
+// Regions: id, name, puzzle prompt, answer (case-insensitive), clue letter (single character)
+const REGIONS = [
+  {id:"library", name:"Library", prompt:"Decode Caesar (shift 3): KHOOR", answer:"HELLO", clue:"E", hint:"Shift 3 back"},
+  {id:"academic", name:"Academic Block", prompt:"If 2▲=4, 3▲=27, 4▲=?", answer:"256", clue:"S", hint:"n^n (4^4)"},
+  {id:"hostel", name:"Hostel", prompt:"Riddle: I speak without a mouth and hear without ears. What am I?", answer:"ECHO", clue:"C", hint:"Classic riddle"},
+  {id:"mess", name:"Mess & Cafeteria", prompt:"Unscramble: AEMLS", answer:"MEALS", clue:"A", hint:"Food word"},
+  {id:"sports", name:"Sports Ground", prompt:"Sequence: 1,1,2,3,5,8,13, ?", answer:"21", clue:"P", hint:"Fibonacci"},
+  {id:"amphi", name:"Amphitheatre", prompt:"Anagram: PACESE (single word)", answer:"ESCAPE", clue:"E", hint:"Rearrange"},
+  {id:"lab", name:"Analytics Lab", prompt:"Binary to text: 01000110 01010010 01001111 01001101", answer:"FROM", clue:"F", hint:"ASCII bytes"},
+  {id:"ground", name:"Open Ground", prompt:"Math: (144 / 12) + 5", answer:"17", clue:"R", hint:"Arithmetic"},
+  {id:"seminar", name:"Seminar Hall", prompt:"Synonym for 'quit' (5 letters)", answer:"LEAVE", clue:"O", hint:"Think simple"},
+  {id:"library2", name:"Library 2nd Floor", prompt:"Roman numerals: X + V + I", answer:"16", clue:"M", hint:"10 + 5 + 1"},
+  {id:"dorm", name:"Dormitory", prompt:"Unscramble: LANAYTIX", answer:"ANALYTIX", clue:"A", hint:"Analytics word"},
+  {id:"classroom", name:"Classroom", prompt:"What is 12 * 12?", answer:"144", clue:"N", hint:"Multiplication"},
+  {id:"parking", name:"Parking Lot", prompt:"Reverse this: XITYLANA", answer:"ANALYTIX", clue:"A", hint:"Read backwards"},
+  {id:"canteen", name:"Canteen", prompt:"Riddle: The more you take from me, the bigger I get. What am I?", answer:"HOLE", clue:"L", hint:"Think paradox"},
+  {id:"auditorium", name:"Auditorium", prompt:"Unscramble: YITXLANA", answer:"ANALYTIX", clue:"Y", hint:"Rearrange"},
+  {id:"garden", name:"Campus Garden", prompt:"Square root of 256?", answer:"16", clue:"T", hint:"Square root"},
+  {id:"lab2", name:"Data Lab", prompt:"First 3 letters of 'ANALYTIX'?", answer:"ANA", clue:"I", hint:"Substring"},
+  {id:"library3", name:"Library Basement", prompt:"Last letter of the alphabet?", answer:"Z", clue:"X", hint:"Trick: letter X is awarded here (for game balance)"},
+];
 
-        const startGameTimer = () => {
-            gameState.timerInterval = setInterval(() => {
-                if (gameState.timer > 0) {
-                    gameState.timer--;
-                    updateTimerDisplay();
-                } else {
-                    clearInterval(gameState.timerInterval);
-                    endGame(false);
-                }
-            }, 1000);
-        };
+// Game state
+let players = []; // {id, name}
+let playerCount = 0;
+let regionState = {}; // id -> {solved:boolean, searched:boolean, collectorId:playerId or null}
+let clues = []; // {id, letter, fromRegion, collectedBy}
+let tray = Array(TRAY_SLOTS).fill(null); // each slot holds letter or null
+let undoStack = [];
+let timerInterval = null;
+let secondsLeft = GAME_SECONDS;
+let gameStarted = false;
 
-        // Game State and Logic
-        const renderStartScreen = () => {
-            gameContainer.innerHTML = '';
-            renderMessage('MBASCAPE: The IMT Nagpur Challenge', "Welcome, team! You've been locked in the IMT Nagpur campus. To escape, you must solve puzzles in different regions to collect clues for the \"WAY OUT LOCK\". You have 5 minutes to escape. Good luck!");
-            const startBtn = createButton('Start Game', () => {
-                startGameTimer();
-                renderView('map');
-            }, 'bg-teal-500 text-gray-900 hover:bg-teal-400');
-            gameContainer.appendChild(startBtn);
-        };
+// DOM refs
+const mapEl = document.getElementById('map');
+const inventoryEl = document.getElementById('inventory');
+const trayEl = document.getElementById('tray');
+const logEl = document.getElementById('log');
+const timerEl = document.getElementById('timer');
+const startBtn = document.getElementById('startBtn');
+const resetBtn = document.getElementById('resetBtn');
+const createTeamBtn = document.getElementById('createTeam');
+const autoFillBtn = document.getElementById('autoFill');
+const playerPills = document.getElementById('playerPills');
+const playerCountEl = document.getElementById('playerCount');
 
-        const renderMap = () => {
-            gameContainer.innerHTML = '';
-            renderHeader();
-            renderMessage('Campus Map', 'Navigate to the different blocks to find the puzzles. Solve them to collect the clues you need to escape!');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalTitle = document.getElementById('modalTitle');
+const modalSub = document.getElementById('modalSub');
+const puzzlePrompt = document.getElementById('puzzlePrompt');
+const puzzleHint = document.getElementById('puzzleHint');
+const puzzleAnswer = document.getElementById('puzzleAnswer');
+const submitAnswerBtn = document.getElementById('submitAnswer');
+const puzzleMsg = document.getElementById('puzzleMsg');
+const regionStatus = document.getElementById('regionStatus');
+const regionSearched = document.getElementById('regionSearched');
+const searchRegionBtn = document.getElementById('searchRegion');
+const closeModalBtn = document.getElementById('closeModal');
+const collectorSelect = document.getElementById('collectorSelect');
+const unlockBtn = document.getElementById('unlockBtn');
+const undoBtn = document.getElementById('undoBtn');
+const shuffleBtn = document.getElementById('shuffleBtn');
+const startInputArea = document.getElementById('teamEntry');
 
-            const mapGrid = document.createElement('div');
-            mapGrid.className = 'grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 w-full';
-            Object.keys(gameState.regions).forEach(key => {
-                const region = gameState.regions[key];
-                const isSolved = region.solved;
-                const regionBtn = createButton(
-                    region.name,
-                    () => isSolved ? null : renderView(key),
-                    `p-4 rounded-xl text-center font-semibold transition-all duration-300 ${isSolved ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-gray-700 hover:bg-gray-600 text-white'}`
-                );
-                mapGrid.appendChild(regionBtn);
-            });
-            gameContainer.appendChild(mapGrid);
+function init() {
+  // render regions
+  mapEl.innerHTML = '';
+  for (const r of REGIONS) {
+    const el = document.createElement('div');
+    el.className = 'region';
+    el.id = 'reg-' + r.id;
+    el.innerHTML = `<h3>${r.name}</h3><div class="small">${r.id}</div>
+      <div style="margin-top:8px" class="region-meta">
+        <div class="status" id="status-${r.id}">🔒 Locked</div>
+        <div class="small" id="searched-${r.id}">Unsearched</div>
+      </div>`;
+    el.addEventListener('click', () => openRegion(r.id));
+    mapEl.appendChild(el);
+    regionState[r.id] = { solved:false, searched:false, collector:null };
+  }
+  // tray slots
+  renderTray();
+  renderInventory();
+  updateTimerDisplay();
+  updatePlayerCount();
+  attachEventHandlers();
+}
 
-            const cluesContainer = document.createElement('div');
-            cluesContainer.className = 'w-full text-center mt-8';
-            cluesContainer.innerHTML = `<h3 class="text-2xl font-bold mb-4">Clue Board</h3>`;
-            const cluesDisplay = document.createElement('div');
-            cluesDisplay.className = 'flex justify-center flex-wrap gap-4 text-xl font-mono';
-            Object.values(gameState.clues).forEach(clue => {
-                const clueItem = document.createElement('div');
-                clueItem.className = 'bg-gray-700 px-4 py-2 rounded-lg';
-                clueItem.innerText = clue || '🔒';
-                cluesDisplay.appendChild(clueItem);
-            });
-            cluesContainer.appendChild(cluesDisplay);
-            gameContainer.appendChild(cluesContainer);
-            
-            const solvedCount = Object.values(gameState.regions).filter(r => r.solved).length;
-            if (solvedCount === 4) {
-                const finalDoorBtn = createButton('Go to The WAY OUT LOCK', () => renderView('finalDoor'), 'bg-amber-500 text-gray-900 hover:bg-amber-400 mt-8');
-                gameContainer.appendChild(finalDoorBtn);
-            }
-        };
+function attachEventHandlers(){
+  createTeamBtn.addEventListener('click', createTeam);
+  autoFillBtn.addEventListener('click', autofillNames);
+  startBtn.addEventListener('click', startGame);
+  resetBtn.addEventListener('click', resetGame);
+  closeModalBtn.addEventListener('click', closeModal);
+  submitAnswerBtn.addEventListener('click', submitPuzzleAnswer);
+  searchRegionBtn.addEventListener('click', handleSearchFromModal);
+  puzzleAnswer.addEventListener('keydown', (e)=>{ if(e.key==='Enter') submitPuzzleAnswer(); });
+  unlockBtn.addEventListener('click', tryUnlock);
+  undoBtn.addEventListener('click', undoLast);
+  shuffleBtn.addEventListener('click', shuffleTrayLetters);
+}
 
-        const renderPuzzle1 = () => { // Admin Block: Simon Says
-            gameContainer.innerHTML = '';
-            renderHeader();
-            renderMessage('Admin Block Puzzle', 'A security panel is flashing a sequence of lights. Repeat the pattern to unlock the clue.');
-            
-            const sequence = ['red', 'blue', 'green', 'yellow'];
-            let playerSequence = [];
-            let currentStep = 0;
-            let canClick = false;
+function createTeam(){
+  players = [];
+  for (let i=1;i<=5;i++){
+    const val = (document.getElementById('p'+i).value||'').trim();
+    if(val) players.push({id:'p'+i, name: val});
+  }
+  if(players.length===0){
+    alert('Enter at least one player name to form a team (you can add up to 5).');
+    return;
+  }
+  playerCount = players.length;
+  populatePlayerPills();
+  populateCollectorSelect();
+  startInputArea.style.display = 'none';
+  updatePlayerCount();
+}
 
-            const puzzleArea = document.createElement('div');
-            puzzleArea.className = 'flex flex-col items-center space-y-6';
+function autofillNames(){
+  // quick sample
+  document.getElementById('p1').value='Player A';
+  document.getElementById('p2').value='Player B';
+  document.getElementById('p3').value='Player C';
+  document.getElementById('p4').value='Player D';
+  document.getElementById('p5').value='Player E';
+}
 
-            const lightGrid = document.createElement('div');
-            lightGrid.className = 'grid grid-cols-2 gap-4';
-            const colors = ['red', 'blue', 'green', 'yellow'];
-            const colorMap = {
-                red: 'bg-red-500',
-                blue: 'bg-blue-500',
-                green: 'bg-green-500',
-                yellow: 'bg-yellow-500'
-            };
+function populatePlayerPills(){
+  playerPills.innerHTML = '';
+  for(const p of players){
+    const el = document.createElement('div');
+    el.className='player-pill';
+    el.textContent = p.name;
+    playerPills.appendChild(el);
+  }
+}
 
-            colors.forEach(color => {
-                const light = document.createElement('div');
-                light.id = `light-${color}`;
-                light.className = `w-24 h-24 rounded-full transition-all duration-300 ${colorMap[color]} cursor-pointer opacity-50 hover:opacity-100`;
-                light.addEventListener('click', () => {
-                    if (canClick) {
-                        playerSequence.push(color);
-                        if (playerSequence[currentStep] === sequence[currentStep]) {
-                            currentStep++;
-                            if (currentStep === sequence.length) {
-                                renderPuzzleResult(true, '15');
-                            }
-                        } else {
-                            renderPuzzleResult(false);
-                        }
-                    }
-                });
-                lightGrid.appendChild(light);
-            });
-            puzzleArea.appendChild(lightGrid);
+function populateCollectorSelect(){
+  collectorSelect.innerHTML = '';
+  for(const p of players){
+    const opt = document.createElement('option');
+    opt.value = p.id; opt.textContent = p.name;
+    collectorSelect.appendChild(opt);
+  }
+}
 
-            const messageEl = document.createElement('p');
-            messageEl.className = 'text-center text-lg';
-            puzzleArea.appendChild(messageEl);
+function updatePlayerCount(){
+  playerCountEl.textContent = String(players.length);
+}
 
-            const playSequence = () => {
-                canClick = false;
-                playerSequence = [];
-                currentStep = 0;
-                messageEl.textContent = 'Watch the sequence...';
-                let i = 0;
-                const interval = setInterval(() => {
-                    if (i < sequence.length) {
-                        const light = document.getElementById(`light-${sequence[i]}`);
-                        light.style.opacity = '1';
-                        setTimeout(() => light.style.opacity = '0.5', 500);
-                        i++;
-                    } else {
-                        clearInterval(interval);
-                        messageEl.textContent = 'Now you try!';
-                        canClick = true;
-                    }
-                }, 1000);
-            };
+function startGame(){
+  if(players.length===0){
+    alert('Create or autofill a team first (at least one player).');
+    return;
+  }
+  if(gameStarted) return;
+  gameStarted = true;
+  startBtn.disabled = true;
+  startBtn.textContent = 'Game Running';
+  // timer
+  secondsLeft = GAME_SECONDS;
+  timerInterval = setInterval(()=>{
+    secondsLeft--;
+    updateTimerDisplay();
+    if(secondsLeft<=0){
+      clearInterval(timerInterval);
+      endGame(false);
+    }
+  },1000);
+  log('Game started. Good luck!');
+}
 
-            gameContainer.appendChild(puzzleArea);
-            playSequence();
-        };
+function updateTimerDisplay(){
+  const m = Math.floor(secondsLeft/60).toString().padStart(2,'0');
+  const s = (secondsLeft%60).toString().padStart(2,'0');
+  timerEl.textContent = `${m}:${s}`;
+  if(secondsLeft<=60) timerEl.style.color='#ff8a65'; else timerEl.style.color='';
+}
 
-        const renderPuzzle2 = () => { // Auditorium: Riddle
-            gameContainer.innerHTML = '';
-            renderHeader();
-            renderMessage('Auditorium Puzzle', 'A locked box is here. The only clue is this riddle. Solve it to get your clue.');
+function resetGame(){
+  if(timerInterval) clearInterval(timerInterval);
+  secondsLeft = GAME_SECONDS;
+  gameStarted = false;
+  startBtn.disabled = false;
+  startBtn.textContent = 'Start Game';
+  clues = [];
+  tray = Array(TRAY_SLOTS).fill(null);
+  undoStack = [];
+  // reset region state
+  for(const r of REGIONS) regionState[r.id] = {solved:false,searched:false,collector:null};
+  // show team entry again
+  startInputArea.style.display = '';
+  players = [];
+  playerCount = 0;
+  playerPills.innerHTML = '';
+  populateCollectorSelect();
+  renderInventory();
+  renderTray();
+  refreshRegionUI();
+  log('Game reset.');
+  updatePlayerCount();
+  updateTimerDisplay();
+}
 
-            const puzzleArea = document.createElement('div');
-            puzzleArea.className = 'flex flex-col items-center space-y-6';
+function refreshRegionUI(){
+  for(const r of REGIONS){
+    const sEl = document.getElementById('status-'+r.id);
+    const seEl = document.getElementById('searched-'+r.id);
+    if(regionState[r.id].solved) sEl.textContent = '✅ Escaped';
+    else sEl.textContent = '🔒 Locked';
+    seEl.textContent = regionState[r.id].searched ? 'Yes' : 'No';
+  }
+}
 
-            const riddleText = document.createElement('p');
-            riddleText.className = 'text-xl md:text-2xl italic font-serif text-center mb-6 max-w-xl';
-            riddleText.innerHTML = `I am a place of speeches and music, but I have no voice. I hold hundreds, but cannot lift a single one. What am I?`;
-            puzzleArea.appendChild(riddleText);
+function openRegion(regionId){
+  const region = REGIONS.find(r=>r.id===regionId);
+  if(!region) return;
+  // populate modal
+  modalTitle.textContent = region.name;
+  modalSub.textContent = region.id;
+  puzzlePrompt.textContent = region.prompt;
+  puzzleHint.textContent = 'Hint: ' + (region.hint||'');
+  puzzleAnswer.value = '';
+  puzzleMsg.innerHTML = '';
+  regionStatus.textContent = regionState[regionId].solved ? '✅ Escaped' : '🔒 Locked';
+  regionSearched.textContent = regionState[regionId].searched ? 'Yes' : 'No';
+  searchRegionBtn.disabled = !regionState[regionId].solved;
+  searchRegionBtn.classList.toggle('disabled',!regionState[regionId].solved);
+  modalBackdrop.style.display = 'flex';
+  modalBackdrop.dataset.region = regionId;
+}
 
-            const inputEl = document.createElement('input');
-            inputEl.type = 'text';
-            inputEl.placeholder = 'Your answer here...';
-            inputEl.className = 'w-full max-w-md px-4 py-2 rounded-lg bg-gray-700 text-gray-100 border-2 border-transparent focus:border-teal-500 focus:outline-none';
-            puzzleArea.appendChild(inputEl);
+function closeModal(){ modalBackdrop.style.display='none'; modalBackdrop.dataset.region=''; }
 
-            const submitBtn = createButton('Submit Answer', () => {
-                const answer = inputEl.value.trim().toLowerCase();
-                if (answer === 'auditorium') {
-                    renderPuzzleResult(true, 'IMT');
-                } else {
-                    renderPuzzleResult(false);
-                }
-            }, 'bg-teal-500 text-gray-900 hover:bg-teal-400');
-            puzzleArea.appendChild(submitBtn);
+function submitPuzzleAnswer(){
+  const regionId = modalBackdrop.dataset.region;
+  if(!regionId) return;
+  const region = REGIONS.find(r=>r.id===regionId);
+  const ans = (puzzleAnswer.value||'').trim().toUpperCase();
+  if(!ans){ puzzleMsg.innerHTML = '<div class="small">Type an answer first.</div>'; return; }
+  const correct = region.answer.toString().trim().toUpperCase();
+  if(ans === correct){
+    regionState[regionId].solved = true;
+    regionState[regionId].collector = null; // not assigned until search
+    puzzleMsg.innerHTML = '<div class="message">Correct! Region escaped — now SEARCH the region to attempt finding the clue tile.</div>';
+    regionStatus.textContent = '✅ Escaped';
+    searchRegionBtn.disabled = false;
+    searchRegionBtn.classList.remove('disabled');
+    refreshRegionUI();
+    log(`Region ${region.name} solved.`);
+  } else {
+    puzzleMsg.innerHTML = '<div class="small" style="color:#ff9aa2">Incorrect answer — try again.</div>';
+  }
+}
 
-            gameContainer.appendChild(puzzleArea);
-        };
+function handleSearchFromModal(){
+  const regionId = modalBackdrop.dataset.region;
+  if(!regionId) return;
+  handleSearch(regionId);
+}
 
-        const renderPuzzle3 = () => { // Academic Block: Math Puzzle
-            gameContainer.innerHTML = '';
-            renderHeader();
-            renderMessage('Academic Block Puzzle', 'A projector screen shows this math problem. The solution is your next clue.');
-            
-            const puzzleArea = document.createElement('div');
-            puzzleArea.className = 'flex flex-col items-center space-y-6';
+function handleSearch(regionId){
+  const region = REGIONS.find(r=>r.id===regionId);
+  if(!region) return;
+  if(!regionState[regionId].solved){ alert('Solve the puzzle first.'); return; }
+  if(regionState[regionId].searched){ alert('Already searched.'); return; }
+  // choose collector (from select)
+  const collectorId = collectorSelect.value || (players[0]&&players[0].id);
+  regionState[regionId].searched = true;
+  regionState[regionId].collector = collectorId;
+  // generate clue tile
+  const tile = {
+    id: 'tile-' + Math.random().toString(36).slice(2,8),
+    letter: region.clue, // single char
+    from: region.name,
+    collectedBy: collectorId
+  };
+  clues.push(tile);
+  renderInventory();
+  refreshRegionUI();
+  regionSearched.textContent = 'Yes';
+  puzzleMsg.innerHTML = `<div class="message">You found a clue: '${tile.letter}' — collected by ${getPlayerNameById(collectorId)}.</div>`;
+  log(`${getPlayerNameById(collectorId)} found '${tile.letter}' at ${region.name}.`);
+}
 
-            const problemText = document.createElement('p');
-            problemText.className = 'text-4xl md:text-5xl font-mono text-center mb-6';
-            problemText.innerHTML = `(2 x 5) + (8 x 8) = ?`;
-            puzzleArea.appendChild(problemText);
+function getPlayerNameById(id){
+  const p = players.find(x=>x.id===id);
+  return p ? p.name : id;
+}
 
-            const inputEl = document.createElement('input');
-            inputEl.type = 'number';
-            inputEl.placeholder = 'Your answer here...';
-            inputEl.className = 'w-full max-w-md px-4 py-2 rounded-lg bg-gray-700 text-gray-100 border-2 border-transparent focus:border-teal-500 focus:outline-none';
-            puzzleArea.appendChild(inputEl);
+function renderInventory(){
+  inventoryEl.innerHTML = '';
+  for(const t of clues){
+    const el = document.createElement('div');
+    el.className = 'tile';
+    el.draggable = true;
+    el.id = t.id;
+    el.title = `${t.letter} — from ${t.from} (collected by ${getPlayerNameById(t.collectedBy)})`;
+    el.textContent = t.letter;
+    el.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', t.id);
+    });
+    inventoryEl.appendChild(el);
+  }
+}
 
-            const submitBtn = createButton('Submit Answer', () => {
-                const answer = parseInt(inputEl.value, 10);
-                if (answer === 74) {
-                    renderPuzzleResult(true, '74');
-                } else {
-                    renderPuzzleResult(false);
-                }
-            }, 'bg-teal-500 text-gray-900 hover:bg-teal-400');
-            puzzleArea.appendChild(submitBtn);
+function renderTray(){
+  trayEl.innerHTML = '';
+  for(let i=0;i<TRAY_SLOTS;i++){
+    const slot = document.createElement('div');
+    slot.className = 'slot' + (tray[i] ? ' filled' : '');
+    slot.dataset.idx = i;
+    slot.textContent = tray[i] || '';
+    // drop handlers to allow dropping tile into specific slot
+    slot.addEventListener('dragover', (e)=> e.preventDefault());
+    slot.addEventListener('drop', (e)=>{
+      e.preventDefault();
+      const tileId = e.dataTransfer.getData('text/plain');
+      placeTileIntoSlot(tileId, parseInt(slot.dataset.idx,10));
+    });
+    trayEl.appendChild(slot);
+  }
+}
 
-            gameContainer.appendChild(puzzleArea);
-        };
+function placeTileIntoSlot(tileId, slotIndex){
+  const tileIndex = clues.findIndex(c=>c.id===tileId);
+  if(tileIndex===-1) return;
+  // find first empty slot if desired; but placing into specific slot
+  if(tray[slotIndex]){
+    // if slot occupied, find next empty
+    const nextEmpty = tray.indexOf(null);
+    if(nextEmpty === -1){ alert('Tray full. Undo or remove a letter first.'); return; }
+    slotIndex = nextEmpty;
+  }
+  const tile = clues.splice(tileIndex,1)[0];
+  tray[slotIndex] = tile.letter;
+  undoStack.push({action:'placed', tile, slot:slotIndex});
+  renderInventory();
+  renderTray();
+  log(`Placed '${tile.letter}' into tray slot ${slotIndex+1}.`);
+}
 
-        const renderPuzzle4 = () => { // Hostel Block: Anagram
-            gameContainer.innerHTML = '';
-            renderHeader();
-            renderMessage('Hostel Block Puzzle', 'A graffiti on the wall has these scrambled letters. Unscramble them to get your final clue.');
-            
-            const puzzleArea = document.createElement('div');
-            puzzleArea.className = 'flex flex-col items-center space-y-6';
+function undoLast(){
+  if(undoStack.length===0) return;
+  const last = undoStack.pop();
+  if(last.action === 'placed'){
+    // remove from tray and return to clues
+    tray[last.slot] = null;
+    const returned = {...last.tile, id:'tile-'+Math.random().toString(36).slice(2,6)};
+    clues.push(returned);
+    renderInventory();
+    renderTray();
+    log(`Undo: returned '${last.tile.letter}' to inventory.`);
+  } else if(last.action === 'removed'){
+    // we might implement removing; not used now
+  }
+}
 
-            const scrambledWord = document.createElement('div');
-            scrambledWord.className = 'text-5xl font-bold tracking-widest text-amber-300';
-            scrambledWord.innerText = 'OLKC';
-            puzzleArea.appendChild(scrambledWord);
+function shuffleTrayLetters(){
+  // take letters from tray, shuffle and put back
+  const letters = tray.filter(Boolean);
+  for (let i = letters.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [letters[i], letters[j]] = [letters[j], letters[i]];
+  }
+  // clear tray then refill from start
+  tray = Array(TRAY_SLOTS).fill(null);
+  for(let i=0;i<letters.length;i++) tray[i] = letters[i];
+  undoStack.push({action:'placed', tile:null, slot:null}); // marker
+  renderTray();
+  log('Shuffled tray letters.');
+}
 
-            const inputEl = document.createElement('input');
-            inputEl.type = 'text';
-            inputEl.placeholder = 'Unscramble the word...';
-            inputEl.className = 'w-full max-w-md px-4 py-2 mt-4 rounded-lg bg-gray-700 text-gray-100 border-2 border-transparent focus:border-teal-500 focus:outline-none';
-            puzzleArea.appendChild(inputEl);
+function tryUnlock(){
+  const attempt = tray.map(x=>x||'').join('');
+  if(attempt.length < TRAY_SLOTS){
+    // allow checking partial (but exact match needed)
+  }
+  // compare ignoring position of spaces (TARGET is without spaces)
+  if(attempt === TARGET){
+    endGame(true);
+  } else {
+    alert(`Lock refused. Current tray spells: "${attempt || '(empty)'}". Keep arranging.`);
+    log(`Unlock attempt failed: "${attempt}"`);
+  }
+}
 
-            const submitBtn = createButton('Submit Answer', () => {
-                const answer = inputEl.value.trim().toUpperCase();
-                if (answer === 'LOCK') {
-                    renderPuzzleResult(true, 'LOCK');
-                } else {
-                    renderPuzzleResult(false);
-                }
-            }, 'bg-teal-500 text-gray-900 hover:bg-teal-400');
-            puzzleArea.appendChild(submitBtn);
+function endGame(won){
+  if(timerInterval) clearInterval(timerInterval);
+  gameStarted = false;
+  startBtn.disabled = false; startBtn.textContent = 'Start Game';
+  if(won){
+    alert('🎉 WAY OUT LOCK opened! You escaped: ESCAPE FROM ANALYTIX');
+    log('Team escaped — WIN!');
+  } else {
+    alert("⏰ Time's up. The team failed to escape.");
+    log('Time up — team lost.');
+  }
+}
 
-            gameContainer.appendChild(puzzleArea);
-        };
+function log(msg){
+  const t = new Date().toLocaleTimeString();
+  const el = document.createElement('div');
+  el.className = 'small';
+  el.textContent = `[${t}] ${msg}`;
+  logEl.prepend(el);
+}
 
-        const renderPuzzleResult = (success, clue = null) => {
-            if (success) {
-                // Determine which puzzle was just solved
-                const puzzleName = gameState.currentView;
-                const regionKey = Object.keys(gameState.regions).find(key => key === puzzleName);
-                if (regionKey) {
-                    gameState.regions[regionKey].solved = true;
-                    gameState.clues[puzzleName] = clue;
-                }
-                
-                gameContainer.innerHTML = '';
-                renderHeader();
-                renderMessage('Success!', `You've solved the puzzle! Your new clue is: <span class="text-amber-300 font-bold">${clue}</span>`);
-                const backBtn = createButton('Back to Map', () => renderView('map'), 'bg-gray-500 text-white hover:bg-gray-400 mt-8');
-                gameContainer.appendChild(backBtn);
-            } else {
-                const currentViewName = gameState.currentView;
-                gameContainer.innerHTML = '';
-                renderHeader();
-                renderMessage('Incorrect!', "That's not the right answer. Try again.");
-                const backBtn = createButton('Try Again', () => renderView(currentViewName), 'bg-red-500 text-white hover:bg-red-400 mt-8');
-                gameContainer.appendChild(backBtn);
-            }
-        };
+/* Dragging from inventory to tray general drop */
+trayEl.addEventListener('drop', (e)=>{
+  e.preventDefault();
+  const tileId = e.dataTransfer.getData('text/plain');
+  // place into first available slot
+  const firstEmpty = tray.indexOf(null);
+  if(firstEmpty === -1){ alert('Tray full. Undo first.'); return; }
+  placeTileIntoSlot(tileId, firstEmpty);
+});
 
-        const renderFinalDoor = () => {
-            gameContainer.innerHTML = '';
-            renderHeader();
-            renderMessage('The WAY OUT LOCK', 'Arrange your clues in a meaningful manner and enter the full sequence below to escape.');
-            
-            const cluesContainer = document.createElement('div');
-            cluesContainer.className = 'w-full text-center mt-4 mb-8';
-            cluesContainer.innerHTML = `<h3 class="text-2xl font-bold mb-4">Your Clues:</h3>`;
-            const cluesDisplay = document.createElement('div');
-            cluesDisplay.className = 'flex justify-center flex-wrap gap-4 text-xl font-mono';
-            Object.values(gameState.clues).forEach(clue => {
-                const clueItem = document.createElement('div');
-                clueItem.className = 'bg-gray-700 px-4 py-2 rounded-lg';
-                clueItem.innerText = clue || '🔒';
-                cluesDisplay.appendChild(clueItem);
-            });
-            cluesContainer.appendChild(cluesDisplay);
-            gameContainer.appendChild(cluesContainer);
+trayEl.addEventListener('dragover', e=>e.preventDefault());
 
-            const inputEl = document.createElement('input');
-            inputEl.type = 'text';
-            inputEl.placeholder = 'Enter the final code here...';
-            inputEl.className = 'w-full max-w-md px-4 py-2 rounded-lg bg-gray-700 text-gray-100 border-2 border-transparent focus:border-teal-500 focus:outline-none';
-            gameContainer.appendChild(inputEl);
+// initialize on load
+init();
 
-            const submitBtn = createButton('Unlock Door', () => {
-                const answer = inputEl.value.trim().toUpperCase();
-                const correctCode = 'IMT-1574-LOCK';
-                if (answer === correctCode) {
-                    endGame(true);
-                } else {
-                    renderMessage('The WAY OUT LOCK', 'That is not the correct code. Try again!');
-                }
-            }, 'bg-teal-500 text-gray-900 hover:bg-teal-400 mt-8');
-            gameContainer.appendChild(submitBtn);
-
-            const backBtn = createButton('Back to Map', () => renderView('map'), 'bg-gray-500 text-white hover:bg-gray-400 mt-4');
-            gameContainer.appendChild(backBtn);
-        };
-
-        const endGame = (didWin) => {
-            clearInterval(gameState.timerInterval);
-            gameContainer.innerHTML = '';
-            renderHeader();
-            if (didWin) {
-                renderMessage('Congratulations!', 'You have successfully arranged the clues and escaped IMT Nagpur!');
-                const playAgainBtn = createButton('Play Again', () => location.reload(), 'bg-teal-500 text-gray-900 hover:bg-teal-400 mt-8');
-                gameContainer.appendChild(playAgainBtn);
-            } else {
-                renderMessage('Time\'s Up!', 'You ran out of time. The campus is now on lockdown. Better luck next time!');
-                const playAgainBtn = createButton('Play Again', () => location.reload(), 'bg-red-500 text-white hover:bg-red-400 mt-8');
-                gameContainer.appendChild(playAgainBtn);
-            }
-        };
-
-        const renderView = (viewName) => {
-            gameState.currentView = viewName;
-            switch (viewName) {
-                case 'start':
-                    renderStartScreen();
-                    break;
-                case 'map':
-                    renderMap();
-                    break;
-                case 'adminBlock':
-                    renderPuzzle1();
-                    break;
-                case 'auditorium':
-                    renderPuzzle2();
-                    break;
-                case 'academicBlock':
-                    renderPuzzle3();
-                    break;
-                case 'hostel':
-                    renderPuzzle4();
-                    break;
-                case 'finalDoor':
-                    renderFinalDoor();
-                    break;
-                default:
-                    renderStartScreen();
-            }
-        };
-
-        // Initial game start
-        renderView('start');
-    </script>
+</script>
 </body>
 </html>
