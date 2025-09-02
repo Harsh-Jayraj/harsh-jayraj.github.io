@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MBASCAPE — ESCAPE FROM ANALYTIX</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>MBASCAPE — ESCAPE FROM ANALYTIX</h1>
+        <div class="small">Team-based campus escape — collect clues, form the phrase, unlock the WAY OUT LOCK</div>
+      </div>
+      <div class="controls">
+        <div class="timer" id="timer">30:00</div>
+        <button class="btn" id="startBtn">Start Game</button>
+        <button class="btn secondary" id="resetBtn">New Game</button>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div><strong>Campus Map — Click a region to open puzzle</strong><div class="small">Solve 1-3 puzzles → search region → collect clue</div></div>
+        <div class="small">Players: <span id="playerCount">0</span>/5</div>
+      </div>
+      <div class="map" id="map">
+        </div>
+      <div style="margin-top:12px" class="hint small">
+        Tip: Communicate — assign players to regions, collect letters, drag them into the tray and arrange in order. Target phrase: <strong>I ESCAPED YAY</strong>
+      </div>
+    </section>
+
+    <aside class="panel right">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>Clue Inventory</strong><div class="small">Drag tiles into the final tray</div></div>
+          <div><strong>Final Target</strong><div class="small">I ESCAPED YAY</div></div>
+        </div>
+        <div style="margin-top:10px" id="playerPills" class="player-section"></div>
+      </div>
+      <div>
+        <div class="small" style="margin-bottom:8px">Collected Clue Tiles</div>
+        <div id="inventory" class="inv-grid"></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div class="small" id="trayLabel">Final Lock Tray</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn secondary" id="undoBtn">Undo</button>
+            <button class="btn secondary" id="shuffleBtn">Shuffle</button>
+            <button class="btn" id="unlockBtn">UNLOCK</button>
+          </div>
+        </div>
+        <div id="tray" class="tray" ondragover="event.preventDefault()"></div>
+      </div>
+      <div id="log" style="margin-top:8px"></div>
+    </aside>
+
+    <footer class="panel" style="text-align:center">
+      <div class="small">Built for quick campus events — open the HTML file to play. Have fun & good luck!</div>
+    </footer>
+  </div>
+
+  <div id="modalBackdrop" style="display:none" class="modal-backdrop">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div style="display:flex;justify-content:space-between;align-items:start">
+        <div>
+          <h2 id="modalTitle">Region</h2>
+          <div class="small" id="modalSub">Puzzle</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div class="small">Player:</div>
+          <select id="collectorSelect"></select>
+          <button class="btn secondary" id="closeModal">Close</button>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <div id="puzzlePrompt" style="font-weight:700;margin-bottom:8px"></div>
+        <div class="small" id="puzzleHint"></div>
+        <div style="margin-top:10px" class="row">
+          <input id="puzzleAnswer" type="text" placeholder="Type your answer (press Enter or Submit)" />
+          <button class="btn" id="submitAnswer">Submit</button>
+          <button class="search-btn disabled" id="searchRegion" disabled>Search Region</button>
+        </div>
+        <div id="puzzleMsg" style="margin-top:10px"></div>
+        <div style="margin-top:12px" class="region-meta">
+          <div class="small">Status: <span id="regionStatus">Locked</span></div>
+          <div class="small">Searched: <span id="regionSearched">No</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="logic.js"></script>
+</body>
+</html>
