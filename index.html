@@ -23,7 +23,7 @@
   .right{display:flex;flex-direction:column;gap:12px}
   .inv-grid{display:flex;flex-wrap:wrap;gap:8px}
   .tile{width:48px;height:48px;border-radius:8px;background:#142a32;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;cursor:grab;border:1px solid rgba(255,255,255,0.03)}
-  .tray{display:grid;grid-template-columns:repeat(18,38px);gap:6px;padding:8px;background:rgba(255,255,255,0.02);border-radius:8px;min-height:56px;align-items:center}
+  .tray{display:grid;grid-template-columns:repeat(8,38px);gap:6px;padding:8px;background:rgba(255,255,255,0.02);border-radius:8px;min-height:56px;align-items:center}
   .slot{height:38px;border-radius:6px;border:2px dashed rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-weight:800;color:#cfe7df;background:transparent}
   .slot.filled{border-style:solid;background:#0e2830}
   .modal-backdrop{position:fixed;inset:0;background:rgba(1,6,12,0.6);display:flex;align-items:center;justify-content:center;z-index:60}
@@ -57,14 +57,12 @@
       </div>
     </header>
 
-    <!-- Left: Map & Regions -->
     <section class="panel">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <div><strong>Campus Map — Click a region to open puzzle</strong><div class="small">Solve puzzle → search region → collect clue</div></div>
         <div class="small">Players: <span id="playerCount">0</span>/5</div>
       </div>
 
-      <!-- Team entry -->
       <div style="margin-bottom:12px" id="teamEntry">
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <input placeholder="Player 1 name" id="p1" type="text" />
@@ -80,20 +78,18 @@
       </div>
 
       <div class="map" id="map">
-        <!-- regions populated by JS -->
-      </div>
+        </div>
 
       <div style="margin-top:12px" class="hint small">
-        Tip: Communicate — assign players to regions, collect letters, drag them into the tray and arrange in order. Target phrase: <strong>ESCAPE FROM ANALYTIX</strong>
+        Tip: Communicate — assign players to regions, collect letters, drag them into the tray and arrange in order. Target phrase: <strong>I ESCAPED YAY</strong>
       </div>
     </section>
 
-    <!-- Right: Inventory & Final Lock -->
     <aside class="panel right">
       <div>
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div><strong>Clue Inventory</strong><div class="small">Drag tiles into the final tray</div></div>
-          <div><strong>Final Target</strong><div class="small">ESCAPE FROM ANALYTIX</div></div>
+          <div><strong>Final Target</strong><div class="small">I ESCAPED YAY</div></div>
         </div>
         <div style="margin-top:10px" id="playerPills" class="player-section"></div>
       </div>
@@ -105,7 +101,7 @@
 
       <div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div class="small">Final Lock Tray (18 letters)</div>
+          <div class="small" id="trayLabel">Final Lock Tray</div>
           <div style="display:flex;gap:8px">
             <button class="btn secondary" id="undoBtn">Undo</button>
             <button class="btn secondary" id="shuffleBtn">Shuffle</button>
@@ -123,7 +119,6 @@
     </footer>
   </div>
 
-<!-- Modal (puzzle) -->
 <div id="modalBackdrop" style="display:none" class="modal-backdrop">
   <div class="modal" role="dialog" aria-modal="true">
     <div style="display:flex;justify-content:space-between;align-items:start">
@@ -160,49 +155,116 @@
 /*
   MBASCAPE — Single HTML implementation
   - Team of up to 5 players
-  - Regions array defines puzzles + letter clues
-  - Target phrase: ESCAPE FROM ANALYTIX (18 letters; tray length = 18)
+  - Regions, Puzzles, and Clues are randomized for replayability.
 */
 
-const TARGET_PHRASE = "ESCAPE FROM ANALYTIX";
-const TARGET = TARGET_PHRASE.replace(/\s+/g, ""); // ESCAPEFROMANALYTIX
-const TRAY_SLOTS = TARGET.length; // 18
+const TARGET_PHRASE = "I ESCAPED YAY";
+const TARGET = TARGET_PHRASE.replace(/\s+/g, "");
+const TRAY_SLOTS = TARGET.length;
 const GAME_SECONDS = 30 * 60; // 30 minutes default
 
-// Regions: id, name, puzzle prompt, answer (case-insensitive), clue letter (single character)
-const REGIONS = [
-  {id:"library", name:"Library", prompt:"Decode Caesar (shift 3): KHOOR", answer:"HELLO", clue:"E", hint:"Shift 3 back"},
-  {id:"academic", name:"Academic Block", prompt:"If 2▲=4, 3▲=27, 4▲=?", answer:"256", clue:"S", hint:"n^n (4^4)"},
-  {id:"hostel", name:"Hostel", prompt:"Riddle: I speak without a mouth and hear without ears. What am I?", answer:"ECHO", clue:"C", hint:"Classic riddle"},
-  {id:"mess", name:"Mess & Cafeteria", prompt:"Unscramble: AEMLS", answer:"MEALS", clue:"A", hint:"Food word"},
-  {id:"sports", name:"Sports Ground", prompt:"Sequence: 1,1,2,3,5,8,13, ?", answer:"21", clue:"P", hint:"Fibonacci"},
-  {id:"amphi", name:"Amphitheatre", prompt:"Anagram: PACESE (single word)", answer:"ESCAPE", clue:"E", hint:"Rearrange"},
-  {id:"lab", name:"Analytics Lab", prompt:"Binary to text: 01000110 01010010 01001111 01001101", answer:"FROM", clue:"F", hint:"ASCII bytes"},
-  {id:"ground", name:"Open Ground", prompt:"Math: (144 / 12) + 5", answer:"17", clue:"R", hint:"Arithmetic"},
-  {id:"seminar", name:"Seminar Hall", prompt:"Synonym for 'quit' (5 letters)", answer:"LEAVE", clue:"O", hint:"Think simple"},
-  {id:"library2", name:"Library 2nd Floor", prompt:"Roman numerals: X + V + I", answer:"16", clue:"M", hint:"10 + 5 + 1"},
-  {id:"dorm", name:"Dormitory", prompt:"Unscramble: LANAYTIX", answer:"ANALYTIX", clue:"A", hint:"Analytics word"},
-  {id:"classroom", name:"Classroom", prompt:"What is 12 * 12?", answer:"144", clue:"N", hint:"Multiplication"},
-  {id:"parking", name:"Parking Lot", prompt:"Reverse this: XITYLANA", answer:"ANALYTIX", clue:"A", hint:"Read backwards"},
-  {id:"canteen", name:"Canteen", prompt:"Riddle: The more you take from me, the bigger I get. What am I?", answer:"HOLE", clue:"L", hint:"Think paradox"},
-  {id:"auditorium", name:"Auditorium", prompt:"Unscramble: YITXLANA", answer:"ANALYTIX", clue:"Y", hint:"Rearrange"},
-  {id:"garden", name:"Campus Garden", prompt:"Square root of 256?", answer:"16", clue:"T", hint:"Square root"},
-  {id:"lab2", name:"Data Lab", prompt:"First 3 letters of 'ANALYTIX'?", answer:"ANA", clue:"I", hint:"Substring"},
-  {id:"library3", name:"Library Basement", prompt:"Last letter of the alphabet?", answer:"Z", clue:"X", hint:"Trick: letter X is awarded here (for game balance)"},
+// --- Data Definitions ---
+
+// A pool of all available puzzles. These will be randomly assigned to regions.
+const PUZZLES = [
+  {prompt:"Decode Caesar (shift 3): KHOOR", answer:"HELLO"},
+  {prompt:"If 2▲=4, 3▲=27, 4▲=?", answer:"256"},
+  {prompt:"Riddle: I speak without a mouth and hear without ears. What am I?", answer:"ECHO"},
+  {prompt:"Unscramble: AEMLS", answer:"MEALS"},
+  {prompt:"Sequence: 1,1,2,3,5,8,13, ?", answer:"21"},
+  {prompt:"Anagram: PACESE (single word)", answer:"ESCAPE"},
+  {prompt:"Python code: print(256 % 8)", answer:"0"},
+  {prompt:"Math: (144 / 12) + 5", answer:"17"},
+  {prompt:"Synonym for 'quit' (5 letters)", answer:"LEAVE"},
+  {prompt:"Roman numerals: X + V + I", answer:"16"},
+  {prompt:"Unscramble: LANAYTIX", answer:"ANALYTIX"},
+  {prompt:"What is 12 * 12?", answer:"144"},
+  {prompt:"Reverse this: XITYLANA", answer:"ANALYTIX"},
+  {prompt:"Riddle: The more you take from me, the bigger I get. What am I?", answer:"HOLE"},
+  {prompt:"I HIDE IN DARK, BUT SHINE WHEN ITS BRIGHT, WHAT AM I?", answer:"BULB"},
+  {prompt:"Square root of 256?", answer:"16"},
+  {prompt:"First 3 letters of 'ANALYTIX'?", answer:"ANA"},
+  {prompt:"Last letter of the alphabet?", answer:"Z"},
 ];
 
-// Game state
-let players = []; // {id, name}
+// Region definitions. Puzzles and clues will be assigned dynamically.
+// `clue: 'X'` is a placeholder to mark this region as one that can hold a clue letter.
+const REGIONS = [
+  {id:"library", name:"Library", clue:"X"},
+  {id:"academic", name:"Academic Block", clue:"X"},
+  {id:"hostel", name:"Hostel", clue:"X"},
+  {id:"mess", name:"Mess & Cafeteria", clue:"X"},
+  {id:"sports", name:"Sports Ground", clue:"X"},
+  {id:"amphi", name:"Amphitheatre", clue:"X"},
+  {id:"lab", name:"Analytics Lab"},
+  {id:"ground", name:"Open Ground", clue:"X"},
+  {id:"seminar", name:"Seminar Hall", clue:"X"},
+  {id:"library2", name:"Library 2nd Floor"},
+  {id:"dorm", name:"Dormitory", clue:"X"},
+  {id:"classroom", name:"Classroom"},
+  {id:"parking", name:"Parking Lot", clue:"X"},
+  {id:"canteen", name:"Canteen"},
+  {id:"auditorium", name:"Auditorium"},
+  {id:"garden", name:"Campus Garden"},
+  {id:"lab2", name:"Data Lab", clue:"X"},
+  {id:"library3", name:"Library Basement"},
+];
+
+
+// --- Randomization Logic ---
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function randomizeClues() {
+  const clueLetters = TARGET.split('');
+  shuffleArray(clueLetters);
+  const clueRegions = REGIONS.filter(r => r.hasOwnProperty('clue'));
+  if (clueRegions.length < clueLetters.length) {
+    console.error("Warning: Not enough regions with 'clue' properties for all the letters.");
+  }
+  clueRegions.forEach((region, index) => {
+    if (index < clueLetters.length) {
+      region.clue = clueLetters[index];
+    } else {
+      delete region.clue; 
+    }
+  });
+}
+
+function randomizePuzzles() {
+  shuffleArray(PUZZLES);
+  if (REGIONS.length > PUZZLES.length) {
+    console.error("Warning: Not enough puzzles for all regions.");
+  }
+  REGIONS.forEach((region, index) => {
+    if (PUZZLES[index]) {
+      region.prompt = PUZZLES[index].prompt;
+      region.answer = PUZZLES[index].answer;
+    }
+  });
+}
+
+function setupNewGame() {
+  randomizePuzzles();
+  randomizeClues();
+}
+setupNewGame(); // Initial setup on script load
+
+// --- Game State & DOM Refs ---
+let players = [];
 let playerCount = 0;
-let regionState = {}; // id -> {solved:boolean, searched:boolean, collectorId:playerId or null}
-let clues = []; // {id, letter, fromRegion, collectedBy}
-let tray = Array(TRAY_SLOTS).fill(null); // each slot holds letter or null
+let regionState = {};
+let clues = [];
+let tray = Array(TRAY_SLOTS).fill(null);
 let undoStack = [];
 let timerInterval = null;
 let secondsLeft = GAME_SECONDS;
 let gameStarted = false;
 
-// DOM refs
 const mapEl = document.getElementById('map');
 const inventoryEl = document.getElementById('inventory');
 const trayEl = document.getElementById('tray');
@@ -214,7 +276,6 @@ const createTeamBtn = document.getElementById('createTeam');
 const autoFillBtn = document.getElementById('autoFill');
 const playerPills = document.getElementById('playerPills');
 const playerCountEl = document.getElementById('playerCount');
-
 const modalBackdrop = document.getElementById('modalBackdrop');
 const modalTitle = document.getElementById('modalTitle');
 const modalSub = document.getElementById('modalSub');
@@ -232,9 +293,10 @@ const unlockBtn = document.getElementById('unlockBtn');
 const undoBtn = document.getElementById('undoBtn');
 const shuffleBtn = document.getElementById('shuffleBtn');
 const startInputArea = document.getElementById('teamEntry');
+const trayLabel = document.getElementById('trayLabel');
 
+// --- Core Game Functions ---
 function init() {
-  // render regions
   mapEl.innerHTML = '';
   for (const r of REGIONS) {
     const el = document.createElement('div');
@@ -249,7 +311,8 @@ function init() {
     mapEl.appendChild(el);
     regionState[r.id] = { solved:false, searched:false, collector:null };
   }
-  // tray slots
+  trayLabel.textContent = `Final Lock Tray (${TRAY_SLOTS} letters)`;
+  trayEl.style.gridTemplateColumns = `repeat(${TRAY_SLOTS}, 1fr)`;
   renderTray();
   renderInventory();
   updateTimerDisplay();
@@ -289,12 +352,9 @@ function createTeam(){
 }
 
 function autofillNames(){
-  // quick sample
   document.getElementById('p1').value='Player A';
   document.getElementById('p2').value='Player B';
   document.getElementById('p3').value='Player C';
-  document.getElementById('p4').value='Player D';
-  document.getElementById('p5').value='Player E';
 }
 
 function populatePlayerPills(){
@@ -329,7 +389,6 @@ function startGame(){
   gameStarted = true;
   startBtn.disabled = true;
   startBtn.textContent = 'Game Running';
-  // timer
   secondsLeft = GAME_SECONDS;
   timerInterval = setInterval(()=>{
     secondsLeft--;
@@ -358,9 +417,8 @@ function resetGame(){
   clues = [];
   tray = Array(TRAY_SLOTS).fill(null);
   undoStack = [];
-  // reset region state
+  setupNewGame();
   for(const r of REGIONS) regionState[r.id] = {solved:false,searched:false,collector:null};
-  // show team entry again
   startInputArea.style.display = '';
   players = [];
   playerCount = 0;
@@ -369,7 +427,7 @@ function resetGame(){
   renderInventory();
   renderTray();
   refreshRegionUI();
-  log('Game reset.');
+  log('Game reset for a new round with new puzzles.');
   updatePlayerCount();
   updateTimerDisplay();
 }
@@ -387,11 +445,9 @@ function refreshRegionUI(){
 function openRegion(regionId){
   const region = REGIONS.find(r=>r.id===regionId);
   if(!region) return;
-  // populate modal
   modalTitle.textContent = region.name;
   modalSub.textContent = region.id;
   puzzlePrompt.textContent = region.prompt;
-  puzzleHint.textContent = 'Hint: ' + (region.hint||'');
   puzzleAnswer.value = '';
   puzzleMsg.innerHTML = '';
   regionStatus.textContent = regionState[regionId].solved ? '✅ Escaped' : '🔒 Locked';
@@ -413,8 +469,8 @@ function submitPuzzleAnswer(){
   const correct = region.answer.toString().trim().toUpperCase();
   if(ans === correct){
     regionState[regionId].solved = true;
-    regionState[regionId].collector = null; // not assigned until search
-    puzzleMsg.innerHTML = '<div class="message">Correct! Region escaped — now SEARCH the region to attempt finding the clue tile.</div>';
+    regionState[regionId].collector = null;
+    puzzleMsg.innerHTML = '<div class="message">Correct! Region escaped — now SEARCH to find the clue tile.</div>';
     regionStatus.textContent = '✅ Escaped';
     searchRegionBtn.disabled = false;
     searchRegionBtn.classList.remove('disabled');
@@ -434,25 +490,40 @@ function handleSearchFromModal(){
 function handleSearch(regionId){
   const region = REGIONS.find(r=>r.id===regionId);
   if(!region) return;
-  if(!regionState[regionId].solved){ alert('Solve the puzzle first.'); return; }
-  if(regionState[regionId].searched){ alert('Already searched.'); return; }
-  // choose collector (from select)
-  const collectorId = collectorSelect.value || (players[0]&&players[0].id);
+
+  if(!regionState[regionId].solved){ 
+    puzzleMsg.innerHTML = '<div class="small" style="color:#ff9aa2">You must solve the puzzle before you can search the region.</div>';
+    return;
+  }
+  if(regionState[regionId].searched){ 
+    puzzleMsg.innerHTML = '<div class="small">This region has already been searched.</div>';
+    return;
+  }
+
   regionState[regionId].searched = true;
+  regionSearched.textContent = 'Yes';
+  refreshRegionUI();
+  
+  const collectorId = collectorSelect.value || (players[0]&&players[0].id);
+  const collectorName = getPlayerNameById(collectorId);
+
+  if(region.clue===undefined){ 
+    puzzleMsg.innerHTML = `<div class="small" style="font-weight:700">Searched by ${collectorName}. SORRY NO CLUE FOUND. TRY SOME OTHER PLACE.</div>`;
+    log(`${collectorName} searched ${region.name} but found no clue.`);
+    return;
+  }
+  
   regionState[regionId].collector = collectorId;
-  // generate clue tile
   const tile = {
     id: 'tile-' + Math.random().toString(36).slice(2,8),
-    letter: region.clue, // single char
+    letter: region.clue,
     from: region.name,
     collectedBy: collectorId
   };
   clues.push(tile);
   renderInventory();
-  refreshRegionUI();
-  regionSearched.textContent = 'Yes';
-  puzzleMsg.innerHTML = `<div class="message">You found a clue: '${tile.letter}' — collected by ${getPlayerNameById(collectorId)}.</div>`;
-  log(`${getPlayerNameById(collectorId)} found '${tile.letter}' at ${region.name}.`);
+  puzzleMsg.innerHTML = `<div class="message">You found a clue: '${tile.letter}' — collected by ${collectorName}.</div>`;
+  log(`${collectorName} found '${tile.letter}' at ${region.name}.`);
 }
 
 function getPlayerNameById(id){
@@ -467,7 +538,7 @@ function renderInventory(){
     el.className = 'tile';
     el.draggable = true;
     el.id = t.id;
-    el.title = `${t.letter} — from ${t.from} (collected by ${getPlayerNameById(t.collectedBy)})`;
+    el.title = `${t.letter} — from ${t.from} (by ${getPlayerNameById(t.collectedBy)})`;
     el.textContent = t.letter;
     el.addEventListener('dragstart', e => {
       e.dataTransfer.setData('text/plain', t.id);
@@ -483,7 +554,6 @@ function renderTray(){
     slot.className = 'slot' + (tray[i] ? ' filled' : '');
     slot.dataset.idx = i;
     slot.textContent = tray[i] || '';
-    // drop handlers to allow dropping tile into specific slot
     slot.addEventListener('dragover', (e)=> e.preventDefault());
     slot.addEventListener('drop', (e)=>{
       e.preventDefault();
@@ -497,9 +567,7 @@ function renderTray(){
 function placeTileIntoSlot(tileId, slotIndex){
   const tileIndex = clues.findIndex(c=>c.id===tileId);
   if(tileIndex===-1) return;
-  // find first empty slot if desired; but placing into specific slot
   if(tray[slotIndex]){
-    // if slot occupied, find next empty
     const nextEmpty = tray.indexOf(null);
     if(nextEmpty === -1){ alert('Tray full. Undo or remove a letter first.'); return; }
     slotIndex = nextEmpty;
@@ -515,40 +583,27 @@ function placeTileIntoSlot(tileId, slotIndex){
 function undoLast(){
   if(undoStack.length===0) return;
   const last = undoStack.pop();
-  if(last.action === 'placed'){
-    // remove from tray and return to clues
+  if(last.action === 'placed' && last.tile){
     tray[last.slot] = null;
-    const returned = {...last.tile, id:'tile-'+Math.random().toString(36).slice(2,6)};
-    clues.push(returned);
+    clues.push(last.tile);
     renderInventory();
     renderTray();
     log(`Undo: returned '${last.tile.letter}' to inventory.`);
-  } else if(last.action === 'removed'){
-    // we might implement removing; not used now
   }
 }
 
 function shuffleTrayLetters(){
-  // take letters from tray, shuffle and put back
   const letters = tray.filter(Boolean);
-  for (let i = letters.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [letters[i], letters[j]] = [letters[j], letters[i]];
-  }
-  // clear tray then refill from start
+  shuffleArray(letters);
   tray = Array(TRAY_SLOTS).fill(null);
   for(let i=0;i<letters.length;i++) tray[i] = letters[i];
-  undoStack.push({action:'placed', tile:null, slot:null}); // marker
+  undoStack.push({action:'shuffled'});
   renderTray();
   log('Shuffled tray letters.');
 }
 
 function tryUnlock(){
-  const attempt = tray.map(x=>x||'').join('');
-  if(attempt.length < TRAY_SLOTS){
-    // allow checking partial (but exact match needed)
-  }
-  // compare ignoring position of spaces (TARGET is without spaces)
+  const attempt = tray.join('');
   if(attempt === TARGET){
     endGame(true);
   } else {
@@ -560,9 +615,9 @@ function tryUnlock(){
 function endGame(won){
   if(timerInterval) clearInterval(timerInterval);
   gameStarted = false;
-  startBtn.disabled = false; startBtn.textContent = 'Start Game';
+  startBtn.disabled = true; 
   if(won){
-    alert('🎉 WAY OUT LOCK opened! You escaped: ESCAPE FROM ANALYTIX');
+    alert(`🎉 WAY OUT LOCK opened! You escaped: ${TARGET_PHRASE}`);
     log('Team escaped — WIN!');
   } else {
     alert("⏰ Time's up. The team failed to escape.");
@@ -578,19 +633,15 @@ function log(msg){
   logEl.prepend(el);
 }
 
-/* Dragging from inventory to tray general drop */
 trayEl.addEventListener('drop', (e)=>{
   e.preventDefault();
   const tileId = e.dataTransfer.getData('text/plain');
-  // place into first available slot
   const firstEmpty = tray.indexOf(null);
   if(firstEmpty === -1){ alert('Tray full. Undo first.'); return; }
   placeTileIntoSlot(tileId, firstEmpty);
 });
-
 trayEl.addEventListener('dragover', e=>e.preventDefault());
 
-// initialize on load
 init();
 
 </script>
