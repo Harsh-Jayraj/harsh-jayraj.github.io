@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MBASCAPE — Create Your Team</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>MBASCAPE — ESCAPE FROM ANALYTIX</h1>
+        <div class="small">Team-based campus escape — collect clues, form the phrase, unlock the WAY OUT LOCK</div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div style="margin-bottom:12px">
+        <strong>Create Your Team (1-5 Players)</strong>
+      </div>
+      
+      <div style="margin-bottom:12px" id="teamEntry">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input placeholder="Player 1 name" id="p1" type="text" />
+          <input placeholder="Player 2 name" id="p2" type="text" />
+          <input placeholder="Player 3 name" id="p3" type="text" />
+          <input placeholder="Player 4 name" id="p4" type="text" />
+          <input placeholder="Player 5 name" id="p5" type="text" />
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px">
+          <button class="btn" id="createTeam">Create Team & Start Game</button>
+          <button class="btn secondary" id="autoFill">Autofill Names</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script>
+  const createTeamBtn = document.getElementById('createTeam');
+  const autoFillBtn = document.getElementById('autoFill');
+
+  autoFillBtn.addEventListener('click', () => {
+    document.getElementById('p1').value = 'Player A';
+    document.getElementById('p2').value = 'Player B';
+    document.getElementById('p3').value = 'Player C';
+  });
+
+  createTeamBtn.addEventListener('click', () => {
+    const players = [];
+    for (let i = 1; i <= 5; i++) {
+      const val = (document.getElementById('p' + i).value || '').trim();
+      if (val) {
+        players.push({ id: 'p' + i, name: val });
+      }
+    }
+
+    if (players.length === 0) {
+      alert('Enter at least one player name to form a team.');
+      return;
+    }
+
+    // Store players in localStorage to pass to the next page
+    localStorage.setItem('mbascape_players', JSON.stringify(players));
+
+    // Redirect to the game page
+    window.location.href = 'game.html';
+  });
+</script>
+</body>
+</html>
