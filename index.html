@@ -59,7 +59,7 @@
 
     <section class="panel">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <div><strong>Campus Map — Click a region to open puzzle</strong><div class="small">Solve puzzle → search region → collect clue</div></div>
+        <div><strong>Campus Map — Click a region to open puzzle</strong><div class="small">Solve 1-3 puzzles → search region → collect clue</div></div>
         <div class="small">Players: <span id="playerCount">0</span>/5</div>
       </div>
 
@@ -165,30 +165,109 @@ const GAME_SECONDS = 30 * 60; // 30 minutes default
 
 // --- Data Definitions ---
 
-// A pool of all available puzzles. These will be randomly assigned to regions.
 const PUZZLES = [
-  {prompt:"Decode Caesar (shift 3): KHOOR", answer:"HELLO"},
-  {prompt:"If 2▲=4, 3▲=27, 4▲=?", answer:"256"},
-  {prompt:"Riddle: I speak without a mouth and hear without ears. What am I?", answer:"ECHO"},
-  {prompt:"Unscramble: AEMLS", answer:"MEALS"},
-  {prompt:"Sequence: 1,1,2,3,5,8,13, ?", answer:"21"},
-  {prompt:"Anagram: PACESE (single word)", answer:"ESCAPE"},
-  {prompt:"Python code: print(256 % 8)", answer:"0"},
-  {prompt:"Math: (144 / 12) + 5", answer:"17"},
-  {prompt:"Synonym for 'quit' (5 letters)", answer:"LEAVE"},
-  {prompt:"Roman numerals: X + V + I", answer:"16"},
-  {prompt:"Unscramble: LANAYTIX", answer:"ANALYTIX"},
-  {prompt:"What is 12 * 12?", answer:"144"},
-  {prompt:"Reverse this: XITYLANA", answer:"ANALYTIX"},
-  {prompt:"Riddle: The more you take from me, the bigger I get. What am I?", answer:"HOLE"},
-  {prompt:"I HIDE IN DARK, BUT SHINE WHEN ITS BRIGHT, WHAT AM I?", answer:"BULB"},
-  {prompt:"Square root of 256?", answer:"16"},
-  {prompt:"First 3 letters of 'ANALYTIX'?", answer:"ANA"},
-  {prompt:"Last letter of the alphabet?", answer:"Z"},
+    { prompt: "What has keys but can’t open locks?", answer: "Piano" },
+    { prompt: "The more you take away, the bigger I get.", answer: "Hole" },
+    { prompt: "I’m always in front of you but can’t be seen.", answer: "Future" },
+    { prompt: "What comes down but never goes up?", answer: "Rain" },
+    { prompt: "The more you share me, the less I become.", answer: "Secret" },
+    { prompt: "I’m tall when I’m young and short when I’m old.", answer: "Candle" },
+    { prompt: "The more of me you take, the more you leave behind.", answer: "Footsteps" },
+    { prompt: "I have no mouth but can speak, no ears but can hear.", answer: "Echo" },
+    { prompt: "What begins with T, ends with T, and is filled with T?", answer: "Teapot" },
+    { prompt: "What belongs to you but is used by everyone else?", answer: "Name" },
+    { prompt: "I’m full of holes but I can hold water.", answer: "Sponge" },
+    { prompt: "If two’s company and three’s a crowd, what are four and five?", answer: "Nine" },
+    { prompt: "Which weighs more, a kilo of cotton or a kilo of iron?", answer: "Equal" },
+    { prompt: "What gets wetter the more it dries?", answer: "Towel" },
+    { prompt: "What has a face and hands but no arms or legs?", answer: "Clock" },
+    { prompt: "The one who makes me, sells me. The one who buys me, never uses me.", answer: "Coffin" },
+    { prompt: "I fly without wings, I cry without eyes.", answer: "Cloud" },
+    { prompt: "If you drop me, I’m sure to crack. But give me a smile, and I’ll smile back.", answer: "Mirror" },
+    { prompt: "What runs but never walks?", answer: "River" },
+    { prompt: "Which month has 28 days?", answer: "All" },
+    { prompt: "What is 15 + 27?", answer: "42" },
+    { prompt: "Half of 100", answer: "50" },
+    { prompt: "81 divided by 9", answer: "9" },
+    { prompt: "If today is Monday, what day will it be in 3 days?", answer: "Thursday" },
+    { prompt: "Next number: 2, 4, 8, 16, ?", answer: "32" },
+    { prompt: "How many sides does a hexagon have?", answer: "6" },
+    { prompt: "Convert Roman numeral XV into a number", answer: "15" },
+    { prompt: "What is 7 squared?", answer: "49" },
+    { prompt: "Add the first 5 odd numbers", answer: "25" },
+    { prompt: "If you double 12, subtract 4, what do you get?", answer: "20" },
+    { prompt: "Capital of France", answer: "Paris" },
+    { prompt: "Largest planet in our solar system", answer: "Jupiter" },
+    { prompt: "Which ocean is the largest?", answer: "Pacific" },
+    { prompt: "Which continent is Egypt in?", answer: "Africa" },
+    { prompt: "Who wrote “Romeo and Juliet”?", answer: "Shakespeare" },
+    { prompt: "The fastest land animal", answer: "Cheetah" },
+    { prompt: "Primary colors are red, blue and…?", answer: "Yellow" },
+    { prompt: "National animal of India", answer: "Tiger" },
+    { prompt: "Water’s chemical formula", answer: "H2O" },
+    { prompt: "Currency of Japan", answer: "Yen" },
+    { prompt: "Unscramble: RDOO", answer: "Door" },
+    { prompt: "Unscramble: ETOHN", answer: "Stone" },
+    { prompt: "Unscramble: TCA", answer: "Cat" },
+    { prompt: "Which word is missing? 'Black and ____'", answer: "White" },
+    { prompt: "Opposite of 'Hot'", answer: "Cold" },
+    { prompt: "Synonym of 'Fast'", answer: "Quick" },
+    { prompt: "'Happy' is to 'Sad' as 'Big' is to…", answer: "Small" },
+    { prompt: "Find the hidden word in 'cANDle'", answer: "And" },
+    { prompt: "Complete: Sun rises in the…", answer: "East" },
+    { prompt: "Word starting with 'D' and ending with 'G' (hint: pet)", answer: "Dog" },
+    { prompt: "How many hours in a day?", answer: "24" },
+    { prompt: "How many days in a leap year?", answer: "366" },
+    { prompt: "How many minutes in an hour?", answer: "60" },
+    { prompt: "How many letters in the English alphabet?", answer: "26" },
+    { prompt: "What is 100 ÷ 25?", answer: "4" },
+    { prompt: "Multiply 9 × 9", answer: "81" },
+    { prompt: "What is 1 less than 100?", answer: "99" },
+    { prompt: "What is 10% of 200?", answer: "20" },
+    { prompt: "Double of 13", answer: "26" },
+    { prompt: "3rd prime number", answer: "5" },
+    { prompt: "Who is Harry Potter’s best friend?", answer: "Ron" },
+    { prompt: "In “Avengers,” who says “I am Iron Man”?", answer: "Tony" },
+    { prompt: "What color is Pikachu?", answer: "Yellow" },
+    { prompt: "Superhero from Gotham City", answer: "Batman" },
+    { prompt: "Elsa sings which song in Frozen?", answer: "Let It Go" },
+    { prompt: "First name of Mr. Bean", answer: "Rowan" },
+    { prompt: "Which company makes iPhones?", answer: "Apple" },
+    { prompt: "Famous mouse by Disney", answer: "Mickey" },
+    { prompt: "Famous plumber in Nintendo", answer: "Mario" },
+    { prompt: "What’s the opposite of Jedi?", answer: "Sith" },
+    { prompt: "Count the letters in “UNLOCK”", answer: "6" },
+    { prompt: "Spell the word backwards: 'GAME'", answer: "EMAG" },
+    { prompt: "How many vowels in 'ESCAPE'?", answer: "3" },
+    { prompt: "First letter of the alphabet", answer: "A" },
+    { prompt: "Last letter of 'Puzzle'", answer: "E" },
+    { prompt: "Middle letter of 'DOOR'", answer: "O" },
+    { prompt: "Which letter comes after C?", answer: "D" },
+    { prompt: "Which number looks like an egg?", answer: "0" },
+    { prompt: "Which number looks like a snake?", answer: "2" },
+    { prompt: "Which letter looks like a circle?", answer: "O" },
+    { prompt: "First man on the moon", answer: "Armstrong" },
+    { prompt: "Longest river in the world", answer: "Nile" },
+    { prompt: "National sport of Japan", answer: "Sumo" },
+    { prompt: "Smallest country in the world", answer: "Vatican" },
+    { prompt: "Instrument with black and white keys", answer: "Piano" },
+    { prompt: "Shape with 4 equal sides", answer: "Square" },
+    { prompt: "Which animal is known as 'Ship of the Desert'?", answer: "Camel" },
+    { prompt: "Opposite of North", answer: "South" },
+    { prompt: "First month of the year", answer: "January" },
+    { prompt: "Last day of the week (commonly)", answer: "Sunday" },
+    { prompt: "How many colors in a rainbow?", answer: "7" },
+    { prompt: "The color of grass", answer: "Green" },
+    { prompt: "Sound a dog makes", answer: "Bark" },
+    { prompt: "How many legs does a spider have?", answer: "8" },
+    { prompt: "Opposite of day", answer: "Night" },
+    { prompt: "Complete: Stars and ____", answer: "Stripes" },
+    { prompt: "Animal that says “Moo”", answer: "Cow" },
+    { prompt: "A triangle has how many sides?", answer: "3" },
+    { prompt: "A baby cat is called?", answer: "Kitten" },
+    { prompt: "Which planet do we live on?", answer: "Earth" },
 ];
 
-// Region definitions. Puzzles and clues will be assigned dynamically.
-// `clue: 'X'` is a placeholder to mark this region as one that can hold a clue letter.
 const REGIONS = [
   {id:"library", name:"Library", clue:"X"},
   {id:"academic", name:"Academic Block", clue:"X"},
@@ -236,14 +315,18 @@ function randomizeClues() {
 }
 
 function randomizePuzzles() {
-  shuffleArray(PUZZLES);
-  if (REGIONS.length > PUZZLES.length) {
-    console.error("Warning: Not enough puzzles for all regions.");
-  }
-  REGIONS.forEach((region, index) => {
-    if (PUZZLES[index]) {
-      region.prompt = PUZZLES[index].prompt;
-      region.answer = PUZZLES[index].answer;
+  const puzzlePool = [...PUZZLES];
+  shuffleArray(puzzlePool);
+  REGIONS.forEach(region => {
+    const numPuzzles = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
+    region.puzzles = [];
+    for (let i = 0; i < numPuzzles; i++) {
+      if (puzzlePool.length > 0) {
+        region.puzzles.push(puzzlePool.pop());
+      } else {
+        console.error("Ran out of puzzles to assign!");
+        break;
+      }
     }
   });
 }
@@ -252,47 +335,27 @@ function setupNewGame() {
   randomizePuzzles();
   randomizeClues();
 }
-setupNewGame(); // Initial setup on script load
+setupNewGame();
 
 // --- Game State & DOM Refs ---
-let players = [];
-let playerCount = 0;
-let regionState = {};
-let clues = [];
-let tray = Array(TRAY_SLOTS).fill(null);
-let undoStack = [];
-let timerInterval = null;
-let secondsLeft = GAME_SECONDS;
-let gameStarted = false;
+let players = [], regionState = {}, clues = [], undoStack = [];
+let playerCount = 0, timerInterval = null, secondsLeft = GAME_SECONDS;
+let tray = Array(TRAY_SLOTS).fill(null), gameStarted = false;
 
-const mapEl = document.getElementById('map');
-const inventoryEl = document.getElementById('inventory');
-const trayEl = document.getElementById('tray');
-const logEl = document.getElementById('log');
-const timerEl = document.getElementById('timer');
-const startBtn = document.getElementById('startBtn');
-const resetBtn = document.getElementById('resetBtn');
-const createTeamBtn = document.getElementById('createTeam');
-const autoFillBtn = document.getElementById('autoFill');
-const playerPills = document.getElementById('playerPills');
-const playerCountEl = document.getElementById('playerCount');
-const modalBackdrop = document.getElementById('modalBackdrop');
-const modalTitle = document.getElementById('modalTitle');
-const modalSub = document.getElementById('modalSub');
-const puzzlePrompt = document.getElementById('puzzlePrompt');
-const puzzleHint = document.getElementById('puzzleHint');
-const puzzleAnswer = document.getElementById('puzzleAnswer');
-const submitAnswerBtn = document.getElementById('submitAnswer');
-const puzzleMsg = document.getElementById('puzzleMsg');
-const regionStatus = document.getElementById('regionStatus');
-const regionSearched = document.getElementById('regionSearched');
-const searchRegionBtn = document.getElementById('searchRegion');
-const closeModalBtn = document.getElementById('closeModal');
-const collectorSelect = document.getElementById('collectorSelect');
-const unlockBtn = document.getElementById('unlockBtn');
-const undoBtn = document.getElementById('undoBtn');
-const shuffleBtn = document.getElementById('shuffleBtn');
-const startInputArea = document.getElementById('teamEntry');
+const mapEl = document.getElementById('map'), inventoryEl = document.getElementById('inventory');
+const trayEl = document.getElementById('tray'), logEl = document.getElementById('log');
+const timerEl = document.getElementById('timer'), startBtn = document.getElementById('startBtn');
+const resetBtn = document.getElementById('resetBtn'), createTeamBtn = document.getElementById('createTeam');
+const autoFillBtn = document.getElementById('autoFill'), playerPills = document.getElementById('playerPills');
+const playerCountEl = document.getElementById('playerCount'), modalBackdrop = document.getElementById('modalBackdrop');
+const modalTitle = document.getElementById('modalTitle'), modalSub = document.getElementById('modalSub');
+const puzzlePrompt = document.getElementById('puzzlePrompt'), puzzleHint = document.getElementById('puzzleHint');
+const puzzleAnswer = document.getElementById('puzzleAnswer'), submitAnswerBtn = document.getElementById('submitAnswer');
+const puzzleMsg = document.getElementById('puzzleMsg'), regionStatus = document.getElementById('regionStatus');
+const regionSearched = document.getElementById('regionSearched'), searchRegionBtn = document.getElementById('searchRegion');
+const closeModalBtn = document.getElementById('closeModal'), collectorSelect = document.getElementById('collectorSelect');
+const unlockBtn = document.getElementById('unlockBtn'), undoBtn = document.getElementById('undoBtn');
+const shuffleBtn = document.getElementById('shuffleBtn'), startInputArea = document.getElementById('teamEntry');
 const trayLabel = document.getElementById('trayLabel');
 
 // --- Core Game Functions ---
@@ -309,7 +372,7 @@ function init() {
       </div>`;
     el.addEventListener('click', () => openRegion(r.id));
     mapEl.appendChild(el);
-    regionState[r.id] = { solved:false, searched:false, collector:null };
+    regionState[r.id] = { solved:false, searched:false, collector:null, incorrectAttempts: 0, currentPuzzleIndex: 0 };
   }
   trayLabel.textContent = `Final Lock Tray (${TRAY_SLOTS} letters)`;
   trayEl.style.gridTemplateColumns = `repeat(${TRAY_SLOTS}, 1fr)`;
@@ -341,7 +404,7 @@ function createTeam(){
     if(val) players.push({id:'p'+i, name: val});
   }
   if(players.length===0){
-    alert('Enter at least one player name to form a team (you can add up to 5).');
+    alert('Enter at least one player name to form a team.');
     return;
   }
   playerCount = players.length;
@@ -382,7 +445,7 @@ function updatePlayerCount(){
 
 function startGame(){
   if(players.length===0){
-    alert('Create or autofill a team first (at least one player).');
+    alert('Create a team first.');
     return;
   }
   if(gameStarted) return;
@@ -418,7 +481,7 @@ function resetGame(){
   tray = Array(TRAY_SLOTS).fill(null);
   undoStack = [];
   setupNewGame();
-  for(const r of REGIONS) regionState[r.id] = {solved:false,searched:false,collector:null};
+  for(const r of REGIONS) regionState[r.id] = {solved:false,searched:false,collector:null, incorrectAttempts: 0, currentPuzzleIndex: 0};
   startInputArea.style.display = '';
   players = [];
   playerCount = 0;
@@ -442,42 +505,88 @@ function refreshRegionUI(){
   }
 }
 
+function loadPuzzleInModal(regionId) {
+    const region = REGIONS.find(r => r.id === regionId);
+    const state = regionState[regionId];
+    const puzzleIndex = state.currentPuzzleIndex;
+    const totalPuzzles = region.puzzles.length;
+    
+    modalSub.textContent = `Puzzle ${puzzleIndex + 1} of ${totalPuzzles}`;
+    
+    const currentPuzzle = region.puzzles[puzzleIndex];
+    puzzlePrompt.textContent = currentPuzzle.prompt;
+    puzzleAnswer.value = '';
+    puzzleMsg.innerHTML = '';
+}
+
 function openRegion(regionId){
   const region = REGIONS.find(r=>r.id===regionId);
   if(!region) return;
   modalTitle.textContent = region.name;
-  modalSub.textContent = region.id;
-  puzzlePrompt.textContent = region.prompt;
-  puzzleAnswer.value = '';
-  puzzleMsg.innerHTML = '';
-  regionStatus.textContent = regionState[regionId].solved ? '✅ Escaped' : '🔒 Locked';
+  
+  const isSolved = regionState[regionId].solved;
+  regionStatus.textContent = isSolved ? '✅ Escaped' : '🔒 Locked';
   regionSearched.textContent = regionState[regionId].searched ? 'Yes' : 'No';
-  searchRegionBtn.disabled = !regionState[regionId].solved;
-  searchRegionBtn.classList.toggle('disabled',!regionState[regionId].solved);
+  
+  searchRegionBtn.disabled = !isSolved;
+  searchRegionBtn.classList.toggle('disabled', !isSolved);
+  closeModalBtn.disabled = !isSolved;
+  closeModalBtn.classList.toggle('disabled', !isSolved);
+  
+  loadPuzzleInModal(regionId);
+  
   modalBackdrop.style.display = 'flex';
   modalBackdrop.dataset.region = regionId;
 }
 
-function closeModal(){ modalBackdrop.style.display='none'; modalBackdrop.dataset.region=''; }
+function closeModal(){ 
+  const regionId = modalBackdrop.dataset.region;
+  if (regionId && !regionState[regionId].solved) {
+    puzzleMsg.innerHTML = '<div class="small" style="color:#ff9aa2">You must solve all puzzles to leave this region!</div>';
+    return;
+  }
+  modalBackdrop.style.display='none'; 
+  modalBackdrop.dataset.region=''; 
+}
 
 function submitPuzzleAnswer(){
   const regionId = modalBackdrop.dataset.region;
   if(!regionId) return;
-  const region = REGIONS.find(r=>r.id===regionId);
+  const region = REGIONS.find(r => r.id === regionId);
+  const state = regionState[regionId];
+  const currentPuzzle = region.puzzles[state.currentPuzzleIndex];
+  
   const ans = (puzzleAnswer.value||'').trim().toUpperCase();
   if(!ans){ puzzleMsg.innerHTML = '<div class="small">Type an answer first.</div>'; return; }
-  const correct = region.answer.toString().trim().toUpperCase();
+
+  const correct = currentPuzzle.answer.toString().trim().toUpperCase();
   if(ans === correct){
-    regionState[regionId].solved = true;
-    regionState[regionId].collector = null;
-    puzzleMsg.innerHTML = '<div class="message">Correct! Region escaped — now SEARCH to find the clue tile.</div>';
-    regionStatus.textContent = '✅ Escaped';
-    searchRegionBtn.disabled = false;
-    searchRegionBtn.classList.remove('disabled');
-    refreshRegionUI();
-    log(`Region ${region.name} solved.`);
+    state.incorrectAttempts = 0; // Reset for next puzzle
+    state.currentPuzzleIndex++;
+
+    if (state.currentPuzzleIndex >= region.puzzles.length) {
+      // All puzzles for this region are solved
+      state.solved = true;
+      puzzleMsg.innerHTML = '<div class="message">All puzzles solved! Region escaped — now SEARCH to find the clue tile.</div>';
+      regionStatus.textContent = '✅ Escaped';
+      searchRegionBtn.disabled = false;
+      searchRegionBtn.classList.remove('disabled');
+      closeModalBtn.disabled = false;
+      closeModalBtn.classList.remove('disabled');
+      refreshRegionUI();
+      log(`Region ${region.name} solved.`);
+    } else {
+      // More puzzles to solve
+      puzzleMsg.innerHTML = '<div class="message">Correct! Here is the next puzzle.</div>';
+      setTimeout(() => loadPuzzleInModal(regionId), 1500); // Load next puzzle after a delay
+    }
   } else {
-    puzzleMsg.innerHTML = '<div class="small" style="color:#ff9aa2">Incorrect answer — try again.</div>';
+    state.incorrectAttempts++;
+    let incorrectMsg = '<div class="small" style="color:#ff9aa2">Incorrect answer — try again.</div>';
+    if (state.incorrectAttempts >= 5) {
+      incorrectMsg += '<div class="small" style="margin-top:8px; color:#94a3b8;">Stuck? You can contact the admin for a hint.</div>';
+    }
+    puzzleMsg.innerHTML = incorrectMsg;
   }
 }
 
@@ -492,7 +601,7 @@ function handleSearch(regionId){
   if(!region) return;
 
   if(!regionState[regionId].solved){ 
-    puzzleMsg.innerHTML = '<div class="small" style="color:#ff9aa2">You must solve the puzzle before you can search the region.</div>';
+    puzzleMsg.innerHTML = '<div class="small" style="color:#ff9aa2">You must solve the puzzle before you can search.</div>';
     return;
   }
   if(regionState[regionId].searched){ 
@@ -513,7 +622,6 @@ function handleSearch(regionId){
     return;
   }
   
-  regionState[regionId].collector = collectorId;
   const tile = {
     id: 'tile-' + Math.random().toString(36).slice(2,8),
     letter: region.clue,
@@ -540,9 +648,7 @@ function renderInventory(){
     el.id = t.id;
     el.title = `${t.letter} — from ${t.from} (by ${getPlayerNameById(t.collectedBy)})`;
     el.textContent = t.letter;
-    el.addEventListener('dragstart', e => {
-      e.dataTransfer.setData('text/plain', t.id);
-    });
+    el.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', t.id));
     inventoryEl.appendChild(el);
   }
 }
