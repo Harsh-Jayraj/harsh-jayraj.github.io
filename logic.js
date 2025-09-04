@@ -52,7 +52,7 @@ const PUZZLES = [
     { prompt: "Water’s chemical formula", answer: "H2O" },
     { prompt: "Currency of Japan", answer: "Yen" },
     { prompt: "Unscramble: RDOO", answer: "Door" },
-    { prompt: "Unscramble: ETOHN", answer: "Stone" },
+    { prompt: "Unscramble: ETOSN", answer: "Stone" },
     { prompt: "Unscramble: TCA", answer: "Cat" },
     { prompt: "Which word is missing? 'Black and ____'", answer: "White" },
     { prompt: "Opposite of 'Hot'", answer: "Cold" },
