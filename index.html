@@ -17,7 +17,7 @@
 
     <section class="panel">
       <div style="margin-bottom:12px">
-        <strong>Create Your Team (1-5 Players)</strong>
+        <strong>Create Your Team (4-5 Players)</strong>
       </div>
       
       <div style="margin-bottom:12px" id="teamEntry">
@@ -36,14 +36,41 @@
     </section>
   </div>
 
+  <div id="alertModalBackdrop" class="modal-backdrop" style="display:none;z-index:100;">
+    <div class="modal" style="width: 400px;max-width:90%;">
+      <h3 id="alertModalTitle" style="margin-top:0;">Alert</h3>
+      <p id="alertModalMessage" style="margin-top:12px;line-height:1.6;"></p>
+      <div id="alertModalSubscript" class="small" style="margin-top:10px;display:none;"></div>
+      <div style="margin-top:20px; text-align:right;">
+        <button class="btn" id="alertModalCloseBtn">OK</button>
+      </div>
+    </div>
+  </div>
+
 <script>
   const createTeamBtn = document.getElementById('createTeam');
   const autoFillBtn = document.getElementById('autoFill');
+
+  function showAlert(title, message) {
+    const backdrop = document.getElementById('alertModalBackdrop');
+    if (!backdrop) return;
+    document.getElementById('alertModalTitle').textContent = title;
+    document.getElementById('alertModalMessage').textContent = message;
+    document.getElementById('alertModalSubscript').style.display = 'none'; // Hide subscript on this page
+    backdrop.style.display = 'flex';
+    const closeBtn = document.getElementById('alertModalCloseBtn');
+    const closeHandler = () => {
+        backdrop.style.display = 'none';
+        closeBtn.removeEventListener('click', closeHandler);
+    };
+    closeBtn.addEventListener('click', closeHandler, { once: true });
+  }
 
   autoFillBtn.addEventListener('click', () => {
     document.getElementById('p1').value = 'Player A';
     document.getElementById('p2').value = 'Player B';
     document.getElementById('p3').value = 'Player C';
+    document.getElementById('p4').value = 'Player D';
   });
 
   createTeamBtn.addEventListener('click', () => {
@@ -55,15 +82,12 @@
       }
     }
 
-    if (players.length === 0) {
-      alert('Enter at least one player name to form a team.');
+    if (players.length < 4) {
+      showAlert('Invalid Team', 'You need at least 4 players to form a team.');
       return;
     }
 
-    // Store players in localStorage to pass to the next page
     localStorage.setItem('mbascape_players', JSON.stringify(players));
-
-    // Redirect to the game page
     window.location.href = 'game.html';
   });
 </script>
