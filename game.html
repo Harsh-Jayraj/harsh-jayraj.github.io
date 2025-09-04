@@ -10,11 +10,11 @@
   <div class="app">
     <header>
       <div>
-        <h1>MBASCAPE — ESCAPE FROM ANALYTIX</h1>
+        <h1 title="Secret Phrase: FINAL LOCK">MBASCAPE — ESCAPE FROM ANALYTIX</h1>
         <div class="small">Team-based campus escape — collect clues, form the phrase, unlock the WAY OUT LOCK</div>
       </div>
       <div class="controls">
-        <div class="timer" id="timer">30:00</div>
+        <div class="timer" id="timer">00:00</div>
         <button class="btn" id="startBtn">Start Game</button>
         <button class="btn secondary" id="resetBtn">New Game</button>
       </div>
@@ -28,7 +28,7 @@
       <div class="map" id="map">
         </div>
       <div style="margin-top:12px" class="hint small">
-        Tip: Communicate — assign players to regions, collect letters, drag them into the tray and arrange in order. Target phrase: <strong>I ESCAPED YAY</strong>
+        Tip: Communicate — assign players to regions, collect letters, and arrange them to form the secret phrase. The phrase is hidden somewhere on this page!
       </div>
     </section>
 
@@ -36,7 +36,6 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div><strong>Clue Inventory</strong><div class="small">Drag tiles into the final tray</div></div>
-          <div><strong>Final Target</strong><div class="small">I ESCAPED YAY</div></div>
         </div>
         <div style="margin-top:10px" id="playerPills" class="player-section"></div>
       </div>
@@ -49,13 +48,12 @@
           <div class="small" id="trayLabel">Final Lock Tray</div>
           <div style="display:flex;gap:8px">
             <button class="btn secondary" id="undoBtn">Undo</button>
-            <button class="btn secondary" id="shuffleBtn">Shuffle</button>
+            <button class="btn secondary" id="resetTrayBtn">Reset</button>
             <button class="btn" id="unlockBtn">UNLOCK</button>
           </div>
         </div>
         <div id="tray" class="tray" ondragover="event.preventDefault()"></div>
       </div>
-      <div id="log" style="margin-top:8px"></div>
     </aside>
 
     <footer class="panel" style="text-align:center">
@@ -89,6 +87,17 @@
           <div class="small">Status: <span id="regionStatus">Locked</span></div>
           <div class="small">Searched: <span id="regionSearched">No</span></div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="alertModalBackdrop" class="modal-backdrop" style="display:none;z-index:100;">
+    <div class="modal" style="width: 400px;max-width:90%;">
+      <h3 id="alertModalTitle" style="margin-top:0;">Alert</h3>
+      <p id="alertModalMessage" style="margin-top:12px;line-height:1.6;"></p>
+      <div id="alertModalSubscript" class="small" style="margin-top:10px;display:none;"></div>
+      <div style="margin-top:20px; text-align:right;">
+        <button class="btn" id="alertModalCloseBtn">OK</button>
       </div>
     </div>
   </div>
