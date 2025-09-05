@@ -30,7 +30,6 @@
           <li><strong>Find the Secret Phrase:</strong> The final target phrase is hidden somewhere on the game page. Hover over elements to find it.</li>
           <li><strong>Unlock the Final Lock:</strong> Drag the collected letter tiles into the final tray in the correct order to spell the secret phrase and win the game.</li>
           <li><strong>The Clock is Ticking:</strong> The stopwatch tracks your team's total time. Finish as quickly as you can!</li>
-          <li><strong>ALRIGHT LETS BEGIN BEST OF LUCK!</strong></li>
         </ul>
       </div>
 
@@ -40,6 +39,7 @@
         <div class="progress-bar-container">
             <div class="progress-bar" id="progressBar"></div>
         </div>
+        <button class="btn secondary" id="skipButton" style="margin-top: 15px;">Skip to Game</button>
       </div>
     </section>
   </div>
@@ -47,8 +47,18 @@
 <script>
   const countdownEl = document.getElementById('countdown');
   const progressBarEl = document.getElementById('progressBar');
+  const skipBtn = document.getElementById('skipButton');
   let timeLeft = 90;
 
+  function skipToGame() {
+    clearInterval(timerInterval);
+    window.location.href = 'game.html';
+  }
+
+  // Add event listener for the skip button
+  skipBtn.addEventListener('click', skipToGame);
+
+  // Main countdown timer
   const timerInterval = setInterval(() => {
     timeLeft--;
     countdownEl.textContent = timeLeft;
@@ -58,8 +68,7 @@
     progressBarEl.style.width = progressPercentage + '%';
 
     if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      window.location.href = 'game.html';
+      skipToGame(); // Redirect when timer finishes
     }
   }, 1000);
 </script>
