@@ -107,7 +107,7 @@ const PUZZLES = [
       { prompt: "First Pokémon in the Pokédex", answer: "Bulbasaur" },
       { prompt: "In Matrix, does Neo take the red or blue pill to escape?", answer: "Red" },
 
-      { prompt: "Count the number of F’s in: “Finished files are the result of years of scientific study.”", answer: "6" },
+      { prompt: "Count the number of F’s in: “Finished files are the result of years of scientific study.”", answer: "5" },
       { prompt: "Rearrange the letters of LISTEN to form another word", answer: "Silent" },
       { prompt: "What comes once in a year, twice in a week, never in a day?", answer: "E" },
       { prompt: "First three digits of Pi", answer: "3.14" },
@@ -146,7 +146,7 @@ const PUZZLES = [
       { prompt: "What is always coming but never arrives?", answer: "Tomorrow" },
       { prompt: "Which number looks the same upside down?", answer: "8" },
       { prompt: "A circle has how many degrees?", answer: "360" },
-      { prompt: "Which common word changes its pronunciation when the first letter is capitalized?", answer: "Polish/polish" },
+      { prompt: "Which common word changes makes things change every time?", answer: "Random" },
       { prompt: "What flies without wings and can destroy everything?", answer: "Time" },
       { prompt: "I am measured in hours, I serve by being devoured.", answer: "Candle" },
       { prompt: "What starts with P, ends with E, and has thousands of letters?", answer: "Post Office" }
