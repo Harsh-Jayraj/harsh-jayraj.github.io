@@ -232,3 +232,105 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+/* --- Styles for the Password Page --- */
+.password-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.password-container input {
+  width: 45px;
+  height: 55px;
+  font-size: 24px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-weight: 700;
+  caret-color: var(--accent); /* Use a theme color for the cursor */
+  transition: all 0.2s ease-in-out;
+}
+
+.password-container input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  transform: scale(1.05);
+}
+/* --- Styles for the Rules Page --- */
+.rules-container ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.rules-container li {
+  padding: 8px 0;
+  line-height: 1.6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.rules-container li:last-child {
+  border-bottom: none;
+}
+
+.timer-section {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.countdown-timer {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--accent);
+  margin-top: 8px;
+  font-family: monospace;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 999px;
+    margin-top: 15px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.progress-bar {
+    height: 100%;
+    width: 100%;
+    background-color: var(--accent);
+    border-radius: 999px;
+    transition: width 1s linear; /* Smooth transition */
+}
+
+/* --- Styles for the Password Page --- */
+.password-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.password-container input {
+  width: 45px;
+  height: 55px;
+  font-size: 24px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-weight: 700;
+  caret-color: var(--accent); /* Use a theme color for the cursor */
+  transition: all 0.2s ease-in-out;
+}
+
+.password-container input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  transform: scale(1.05);
+}
