@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MBASCAPE — Game Rules</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>MBASCAPE — ESCAPE FROM ANALYTIX</h1>
+        <div class="small">Team-based campus escape — collect clues, form the phrase, unlock the WAY OUT LOCK</div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div style="margin-bottom:12px">
+        <strong>Game Rules & Objective</strong>
+      </div>
+      
+      <div style="margin-bottom:12px" class="rules-container">
+        <ul>
+          <li><strong>Objective:</strong> Your team must find letter clues hidden across the campus, discover the secret phrase, and use it to unlock the final lock.</li>
+          <li><strong>Explore Regions:</strong> Click on any region on the campus map to enter it and solve its puzzles.</li>
+          <li><strong>Solve Puzzles:</strong> Each region contains 1-3 puzzles. Your team must solve all of them to "escape" the region.</li>
+          <li><strong>You Are Locked In:</strong> Once you enter a region, you cannot leave until you have solved all its puzzles.</li>
+          <li><strong>Search for Clues:</strong> After escaping a region, you can search it to find a letter clue. Not all regions contain a clue!</li>
+          <li><strong>Find the Secret Phrase:</strong> The final target phrase is hidden somewhere on the game page. Hover over elements to find it.</li>
+          <li><strong>Unlock the Final Lock:</strong> Drag the collected letter tiles into the final tray in the correct order to spell the secret phrase and win the game.</li>
+          <li><strong>The Clock is Ticking:</strong> The stopwatch tracks your team's total time. Finish as quickly as you can!</li>
+          <li><strong>ALRIGHT LETS BEGIN BEST OF LUCK!</strong></li>
+        </ul>
+      </div>
+
+      <div class="timer-section">
+        <p class="small">The game will begin in...</p>
+        <div class="countdown-timer" id="countdown">30</div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script>
+  const countdownEl = document.getElementById('countdown');
+  const progressBarEl = document.getElementById('progressBar');
+  let timeLeft = 90;
+
+  const timerInterval = setInterval(() => {
+    timeLeft--;
+    countdownEl.textContent = timeLeft;
+    
+    // Update progress bar
+    const progressPercentage = (timeLeft / 30) * 100;
+    progressBarEl.style.width = progressPercentage + '%';
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      window.location.href = 'game.html';
+    }
+  }, 1000);
+</script>
+</body>
+</html>
