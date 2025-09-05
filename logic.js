@@ -185,6 +185,7 @@ function randomizePuzzles() {
   });
 }
 function setupNewGame() {
+  shuffleArray(REGIONS); // Shuffle the regions for better randomness
   randomizePuzzles();
   randomizeClues();
 }
@@ -332,6 +333,8 @@ function openRegion(regionId) {
     modalBackdrop.style.display = 'flex';
     regionStatus.textContent = state.solved ? '✅ Escaped' : '🔒 Locked';
     regionSearched.textContent = state.searched ? 'Yes' : 'No';
+    closeModalBtn.disabled = !state.solved; // Lock the close button until solved
+    closeModalBtn.classList.toggle('disabled', !state.solved);
 
     if (state.solved) {
         modalSub.textContent = state.searched ? "Region Searched" : "Region Escaped";
@@ -340,20 +343,21 @@ function openRegion(regionId) {
         submitAnswerBtn.style.display = 'none';
         searchRegionBtn.disabled = state.searched;
         searchRegionBtn.classList.toggle('disabled', state.searched);
-        closeModalBtn.disabled = false;
-        closeModalBtn.classList.remove('disabled');
         puzzleMsg.innerHTML = '';
     } else {
         puzzleAnswer.style.display = 'block';
         submitAnswerBtn.style.display = 'block';
         searchRegionBtn.disabled = true;
         searchRegionBtn.classList.add('disabled');
-        closeModalBtn.disabled = false;
-        closeModalBtn.classList.remove('disabled');
         loadPuzzleInModal(regionId);
     }
 }
-function closeModal(){ 
+function closeModal(){
+  const regionId = modalBackdrop.dataset.region;
+  if (regionId && !regionState[regionId].solved) {
+    puzzleMsg.innerHTML = '<div class="small" style="color:#ff9aa2">You must solve all puzzles to leave this region!</div>';
+    return;
+  }
   modalBackdrop.style.display='none'; 
   modalBackdrop.dataset.region=''; 
 }
@@ -429,17 +433,6 @@ function handleSearch(regionId){
   clues.push(tile);
   renderInventory();
   puzzleMsg.innerHTML = `<div class="message">You found a clue: '${tile.letter}' — collected by ${collectorName}.</div>`;
-
-  if (clues.length === TARGET.length) {
-    setTimeout(() => {
-        showAlert(
-            'All Clues Collected!', 
-            'You have found all the letter tiles. Now, find the secret phrase hidden somewhere on this page and arrange the tiles in the final tray to escape!',
-            null,
-            null
-        );
-    }, 2000);
-  }
 }
 function getPlayerNameById(id){
   const p = players.find(x=>x.id===id);
