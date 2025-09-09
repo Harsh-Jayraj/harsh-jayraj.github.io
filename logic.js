@@ -70,7 +70,7 @@ const PUZZLES = [
       { prompt: "What year did World War II end?", answer: "1945" },
       { prompt: "Which planet has the longest day?", answer: "Venus" },
       { prompt: "First person to circumnavigate the Earth?", answer: "Magellan" },
-      { prompt: "What’s the national flower of Japan?", answer: "Cherry Blossom" },
+      { prompt: "What’s the cultural flower of Japan?", answer: "Cherry Blossom" },
       { prompt: "Which Shakespeare play features witches chanting 'Double, double toil and trouble'?", answer: "Macbeth" },
       { prompt: "Who discovered penicillin?", answer: "Alexander Fleming" },
 
