@@ -99,7 +99,7 @@ const PUZZLES = [
       { prompt: "Sherlock Holmes’ assistant", answer: "Watson" },
       { prompt: "“Winter is Coming” is from which TV show?", answer: "Game of Thrones" },
       { prompt: "What is Superman’s real name?", answer: "Clark kent" },
-      { prompt: "What is the name of AI used by tony stark", answer: "Friday" },
+      { prompt: "What is the name of Last AI used by tony stark", answer: "Friday" },
       { prompt: "Who lives in a pineapple under the sea?", answer: "SpongeBob" },
       { prompt: "What is Thor’s hammer called?", answer: "Mjolnir" },
       { prompt: "Which Hogwarts house values courage?", answer: "Gryffindor" },
