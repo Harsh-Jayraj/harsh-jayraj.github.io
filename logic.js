@@ -45,7 +45,6 @@ const PUZZLES = [
       { prompt: "The more you cut me, the bigger I grow.", answer: "Debt" },
       { prompt: "What begins with an “e” but only has one letter?", answer: "Envelope" },
       { prompt: "You see me once in a minute, twice in a moment, never in a thousand years.", answer: "M" },
-      { prompt: "The more of me you see, the less you see.", answer: "Darkness" },
       { prompt: "I’m light as a feather, yet the strongest man can’t hold me more than a minute.", answer: "Breath" },
       { prompt: "If you feed me, I live. If you water me, I die.", answer: "Fire" },
       { prompt: "I shave every day, but my beard stays the same.", answer: "Barber" },
