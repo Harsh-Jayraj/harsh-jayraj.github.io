@@ -134,7 +134,7 @@ const PUZZLES = [
       { prompt: "Who developed the theory of relativity?", answer: "Einstein" },
       { prompt: "First book of the Bible", answer: "Genesis" },
       { prompt: "Which gas do plants release during photosynthesis?", answer: "Oxygen" },
-      { prompt: "Largest desert in the world", answer: "Sahara" },
+      { prompt: "Largest desert in the world", answer: "Antarctica" },
       { prompt: "Capital of Australia", answer: "Canberra" },
       { prompt: "Who invented the telephone?", answer: "Alexander Graham Bell" },
       { prompt: "Which planet is known as the Morning Star?", answer: "Venus" },
