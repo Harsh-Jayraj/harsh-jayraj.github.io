@@ -111,7 +111,7 @@ const PUZZLES = [
       { prompt: "What comes once in a year, twice in a week, never in a day?", answer: "E" },
       { prompt: "First three digits of Pi", answer: "3.14" },
       { prompt: "If a dozen eggs costs ₹60, how much does one egg cost?", answer: "₹5" },
-      { prompt: "What is the longest english word without any vowel?", answer: "Rythm" },
+      { prompt: "What is the longest english word without any vowel?", answer: "Rhythm" },
       { prompt: "How many 0’s in one million?", answer: "6" },
       { prompt: "Which letter is also a question?", answer: "Y" },
       { prompt: "What has keys but can’t open any door?", answer: "Piano" },
