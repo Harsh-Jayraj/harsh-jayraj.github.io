@@ -121,7 +121,7 @@ const PUZZLES = [
       { prompt: "The more you take from me, the more I grow.", answer: "Hole" },
       { prompt: "Forward I’m heavy, backward I’m not.", answer: "Ton" },
       { prompt: "What word begins and ends with an E, but has only one letter?", answer: "Envelope" },
-      { prompt: "I’m in the sky but never in the sun. I’m in the sea but never in the ocean.", answer: "Letter S" },
+      { prompt: "I’m in the sky but never in the moon. I’m in the sea but never in the ocean.", answer: "Letter S" },
       { prompt: "The more of me you see, the less you see.", answer: "Fog" },
       { prompt: "I have a neck but no head, I have two arms but no hand?", answer: "Shirt" },
       { prompt: "I have keys but no locks, space but no room.", answer: "Keyboard" },
